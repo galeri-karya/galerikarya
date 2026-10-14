@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SastraKarya - Galeri Mahasiswa</title>
+    <!-- Memuat Tailwind CSS untuk Desain -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat FontAwesome untuk Ikon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Animasi Loading */
+        .loader { border-top-color: #3b82f6; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 scroll-smooth">
+
+    <!-- Navbar -->
+    <nav class="bg-[#194060] text-white py-5 px-8 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-3 font-bold text-2xl tracking-wide">
+            <i class="fas fa-book-open text-[#38bdf8]"></i>
+            <span>SastraKarya</span>
+        </div>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold text-gray-200">
+            <a href="#beranda" class="hover:text-white transition-colors">Beranda</a>
+            <a href="#mata-kuliah" class="hover:text-white transition-colors">Mata Kuliah</a>
+            <a href="#galeri" class="hover:text-white transition-colors">Galeri Karya</a>
+            <a href="#submit-karya" class="text-[#38bdf8] font-bold hover:text-white transition-colors border-b-2 border-[#38bdf8] pb-1">Submit Karya</a>
+            <a href="#kontak" class="hover:text-white transition-colors">Kontak</a>
+        </div>
+    </nav>
+
+    <!-- Header / Hero Section -->
+    <header id="beranda" class="bg-gradient-to-br from-[#1e3a5f] via-[#2c5f87] to-[#1e3a5f] text-white py-32 text-center relative shadow-lg">
+        <div class="relative z-10 max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">Galeri Karya <span class="text-[#38bdf8]">Mahasiswa Sastra</span></h1>
+            <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-10 font-normal leading-relaxed">Wadah apresiasi dan publikasi pemikiran kritis, analitis, dan kreatif mahasiswa dalam mengeksplorasi luasnya ilmu sastra dan bahasa.</p>
+            <a href="#galeri" class="inline-flex items-center justify-center px-8 py-3.5 bg-white text-[#1e3a5f] font-bold rounded-full hover:bg-gray-100 transition-colors shadow-md text-sm uppercase tracking-wider">
+                Eksplorasi Karya <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Mata Kuliah Section -->
+    <section id="mata-kuliah" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Mata Kuliah</h2>
+            <div class="w-16 h-1 bg-[#38bdf8] mx-auto mb-6"></div>
+            <p class="text-gray-500 mb-12 max-w-2xl mx-auto text-sm">Ruang lingkup keilmuan yang menjadi dasar lahirnya karya-karya luar biasa dari para mahasiswa.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-brain"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">Psikologi Sastra</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Mengkaji keterkaitan antara kejiwaan manusia, proses kreatif pengarang, dan manifestasi psikologis dalam karya sastra.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-globe"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">Sastra Bandingan</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Studi komparatif karya sastra melintasi batas negara, bahasa, dan disiplin ilmu untuk menemukan universalitas.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-pen-nib"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">Apresiasi & Kritik Sastra</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Melatih ketajaman analisis dan evaluasi karya sastra dengan menggunakan berbagai pendekatan dan teori kritis.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-book-reader"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">Kajian Ilmu Sastra</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Pemahaman mendalam mengenai ontologi, epistemologi, dan aksiologi ilmu sastra sebagai dasar penelitian akademis.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-robot"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">AI dalam Bahasa & Sastra</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Eksplorasi persimpangan antara kecerdasan buatan dan linguistik/sastra, termasuk pemrosesan bahasa alami.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50">
+                    <div class="w-10 h-10 bg-blue-100 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-network-wired"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2">Sastra Cyber</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Menganalisis fenomena sastra di ruang digital, mencakup hiperteks, sastra media sosial, dan dinamika pembaca maya.</p>
+                </div>
+                <div class="p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow bg-gray-50/50 md:col-span-2 lg:col-span-3 lg:w-1/3 lg:mx-auto">
+                    <div class="w-10 h-10 bg-gray-100 text-gray-500 rounded-lg flex items-center justify-center mb-4 text-lg mx-auto"><i class="fas fa-ellipsis-h"></i></div>
+                    <h3 class="font-bold text-[#1e3a5f] text-lg mb-2 text-center">Mata Kuliah Lainnya</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed text-center">Mewadahi portofolio dan karya mahasiswa dari berbagai mata kuliah pilihan serta peminatan lainnya.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bentuk Output Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-[#1e3a5f] mb-8">Bentuk Output Karya</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-file-alt"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Artikel Ilmiah</h3>
+                    <p class="text-xs text-gray-500">Penelitian berbasis metodologi ketat, menelaah fenomena sastra terstruktur.</p>
+                </div>
+                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-feather-alt"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Esai</h3>
+                    <p class="text-xs text-gray-500">Tulisan reflektif dan argumentatif yang mengekspresikan opini kritis penulis.</p>
+                </div>
+                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-video"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Video</h3>
+                    <p class="text-xs text-gray-500">Interpretasi visual dan presentasi kreatif dari analisis sastra, puisi, atau kajian.</p>
+                </div>
+                <div class="p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div class="w-12 h-12 bg-purple-50 text-purple-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-lightbulb"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Karya Lainnya</h3>
+                    <p class="text-xs text-gray-500">Format alternatif seperti podcast, poster digital, maupun inovasi karya kreatif lainnya.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeri Karya Section (Bagian Dinamis) -->
+    <section id="galeri" class="py-16 bg-white min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Galeri Karya Mahasiswa</h2>
+            <div class="w-16 h-1 bg-[#38bdf8] mx-auto mb-8"></div>
+            
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <button class="px-6 py-2 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-sm transition-colors cursor-default">Semua Karya</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors cursor-not-allowed">Artikel Ilmiah</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors cursor-not-allowed">Esai</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors cursor-not-allowed">Video</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 text-gray-600 text-sm font-semibold hover:bg-gray-200 transition-colors cursor-not-allowed">Lainnya</button>
+            </div>
+
+            <!-- Indikator Loading -->
+            <div id="loading" class="flex flex-col justify-center items-center py-10">
+                <div class="loader ease-linear rounded-full border-4 border-gray-200 h-10 w-10 mb-3"></div>
+                <p class="text-gray-400 text-sm animate-pulse">Memuat karya terbaru dari Google Sheets...</p>
+            </div>
+
+            <!-- WADAH GALERI -->
+            <div id="wadah-karya-asli" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left hidden">
+                <!-- Data akan disuntikkan di sini -->
+            </div>
+            
+            <!-- Pesan Error -->
+             <div id="error-message" class="hidden text-center p-6 bg-red-50 rounded-lg border border-red-200 max-w-lg mx-auto">
+                 <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-3"></i>
+                 <p class="text-red-700 font-semibold mb-1">Gagal Memuat Galeri</p>
+                 <p class="text-sm text-red-600">Terjadi kendala saat memuat data dari Spreadsheet. Pastikan koneksi stabil.</p>
+             </div>
+        </div>
+    </section>
+
+    <!-- Submit Karya Section (Google Form Embed) -->
+    <section id="submit-karya" class="py-20 bg-[#e0f2fe]">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Submit Karya Anda</h2>
+            <div class="w-16 h-1 bg-[#38bdf8] mx-auto mb-6"></div>
+            <p class="text-gray-600 mb-10 max-w-2xl mx-auto text-sm leading-relaxed">Silakan unggah portofolio tugas (Artikel, Esai, Video, atau Lainnya) Anda melalui formulir di bawah ini.</p>
+            <div class="bg-white rounded-2xl shadow-lg p-2 md:p-6 overflow-hidden w-full h-[800px]">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScT2wYRhVq97HX56t2EGPUfzhAclSqZamf7U_mdhGPdJKM9eA/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" class="rounded-xl border-none bg-gray-50">Memuat Form...</iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak" class="bg-[#0f172a] text-gray-300 py-12 text-sm border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <div class="flex items-center space-x-2 font-bold text-lg text-white mb-4">
+                    <i class="fas fa-book-open text-blue-400"></i>
+                    <span>SastraKarya</span>
+                </div>
+                <p class="text-gray-400 max-w-xs leading-relaxed">Menjadi ruang apresiasi digital bagi mahasiswa sastra untuk mempublikasikan gagasan, kritik, dan analisis dalam berbagai format kreatif.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Mata Kuliah Terkait</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Psikologi Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Sastra Bandingan</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Apresiasi & Kritik Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> AI dalam Bahasa & Sastra</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Hubungi Kami</h4>
+                <div class="space-y-4 text-gray-400">
+                    <div class="flex items-start">
+                        <i class="fas fa-envelope text-blue-400 mt-1 mr-3 w-4"></i>
+                        <div>
+                            <p class="text-white">dosen.sastra@universitas.edu</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Untuk pertanyaan seputar publikasi</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3 w-4"></i>
+                        <p class="text-white">Fakultas Bahasa dan Seni Unimed, Jalan Willem Iskandar, Pasar V, Medan Estate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2026 Galeri Karya Mahasiswa Sastra. Hak Cipta Dilindungi.</p>
+            <div class="flex space-x-4 mt-4 md:mt-0">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-globe"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SKRIP PENARIK DATA GOOGLE SHEETS (DIPERBARUI UNTUK MENDUKUNG SEMUA BROWSER LAMA & BARU) -->
+    <script>
+        // Timeout 10 detik sebagai pelindung jika koneksi Google Sheets lambat atau diblokir
+        var loadingTimeout = setTimeout(function() {
+            var loadEl = document.getElementById('loading');
+            var errEl = document.getElementById('error-message');
+            if(loadEl && errEl) {
+                loadEl.classList.add('hidden');
+                errEl.classList.remove('hidden');
+                errEl.innerHTML += '<p class="text-xs mt-2 text-red-500">Waktu tunggu habis (Timeout). Coba muat ulang halaman.</p>';
+            }
+        }, 10000);
+
+        function handleScriptError() {
+            clearTimeout(loadingTimeout);
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+
+        window.google = {
+            visualization: {
+                Query: {
+                    setResponse: function(data) {
+                        try {
+                            clearTimeout(loadingTimeout); // Hentikan hitungan mundur jika sukses
+                            var wadah = document.getElementById('wadah-karya-asli');
+                            var loading = document.getElementById('loading');
+                            var errorMsg = document.getElementById('error-message');
+                            
+                            loading.classList.add('hidden');
+                            
+                            if (data.status === 'error') {
+                                errorMsg.classList.remove('hidden');
+                                errorMsg.innerHTML += '<p class="text-xs mt-2 text-red-500">Akses Sheets Ditolak.</p>';
+                                return;
+                            }
+                            
+                            errorMsg.classList.add('hidden');
+                            wadah.classList.remove('hidden');
+                            wadah.innerHTML = ''; 
+                            
+                            var rows = data.table.rows;
+                            var bgColors = ['bg-[#0f172a]', 'bg-[#831843]', 'bg-[#064e3b]', 'bg-[#1e3a8a]', 'bg-[#78350f]', 'bg-[#4c1d95]'];
+                            var hasData = false;
+
+                            for (var i = 0; i < rows.length; i++) {
+                                var row = rows[i];
+                                
+                                // Deteksi baris kosong atau header dengan cara aman (tanpa Optional Chaining)
+                                if (!row || !row.c || !row.c[1] || (i === 0 && row.c[1].v && row.c[1].v.toString().indexOf('Nama') !== -1)) {
+                                    continue;
+                                }
+                                
+                                hasData = true;
+                                
+                                // Penarikan data sel yang 100% kompatibel dengan semua browser
+                                var nama = (row.c[1] && row.c[1].v) ? row.c[1].v : 'Tanpa Nama';
+                                var matkul = ((row.c[3] && row.c[3].v) ? row.c[3].v : 'Umum').toUpperCase();
+                                var kategori = (row.c[4] && row.c[4].v) ? row.c[4].v : 'Karya';
+                                var judulAsli = (row.c[5] && row.c[5].v) ? row.c[5].v.toString() : 'Tanpa Judul';
+                                var linkKarya = (row.c[6] && row.c[6].v) ? row.c[6].v : '#';
+                                var linkGambar = (row.c[7] && row.c[7].v) ? row.c[7].v : ''; 
+
+                                // Mengamankan judul dari tanda kutip ganda/tunggal yang sering merusak struktur HTML
+                                var judul = judulAsli.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                                var badgeHTML = '<span class="bg-gray-600 text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 shadow-sm z-10">' + kategori + '</span>';
+                                var iconHTML = '<i class="fas fa-external-link-alt mr-2"></i> Lihat Karya';
+                                
+                                var katLower = kategori.toLowerCase();
+                                if(katLower.indexOf('artikel') !== -1 || katLower.indexOf('jurnal') !== -1) {
+                                    badgeHTML = '<span class="bg-[#3b82f6] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 shadow-sm z-10">' + kategori + '</span>';
+                                    iconHTML = '<i class="fas fa-book-open mr-2"></i> Baca Artikel';
+                                } else if(katLower.indexOf('video') !== -1) {
+                                    badgeHTML = '<span class="bg-[#ef4444] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 shadow-sm z-10">' + kategori + '</span>';
+                                    iconHTML = '<i class="fas fa-play-circle mr-2"></i> Tonton Video';
+                                } else if(katLower.indexOf('esai') !== -1) {
+                                    badgeHTML = '<span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 shadow-sm z-10">' + kategori + '</span>';
+                                    iconHTML = '<i class="fas fa-align-left mr-2"></i> Baca Esai';
+                                }
+
+                                var isImageValid = false;
+                                var coverContent = '';
+                                var bgColorClass = bgColors[i % bgColors.length];
+                                
+                                if (linkGambar && linkGambar.indexOf('drive.google.com') !== -1) {
+                                    var matchID = linkGambar.match(/id=([a-zA-Z0-9_-]+)/) || linkGambar.match(/d\/([a-zA-Z0-9_-]+)/);
+                                    if (matchID && matchID[1]) {
+                                        var imageId = matchID[1];
+                                        var directUrl = 'https://drive.google.com/thumbnail?id=' + imageId + '&sz=w800';
+                                        
+                                        // Desain HTML yang lebih bersih untuk menghindari tumpukan script
+                                        coverContent = `
+                                            <img src="${directUrl}" alt="${judul}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='none'; this.nextElementSibling.nextElementSibling.style.display='block'; this.parentElement.classList.remove('bg-gray-200'); this.parentElement.classList.add('${bgColorClass}');">
+                                            <div class="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent pointer-events-none"></div>
+                                            <h3 class="text-white text-xl font-medium leading-snug font-serif tracking-wide drop-shadow-md line-clamp-3 px-6 absolute" style="display:none;">${judul}</h3>
+                                        `;
+                                        isImageValid = true;
+                                    }
+                                }
+
+                                if (!isImageValid) {
+                                    coverContent = `<h3 class="text-white text-xl font-medium leading-snug font-serif tracking-wide drop-shadow-md line-clamp-3 px-6">${judul}</h3>`;
+                                }
+
+                                var desainKartu = `
+                                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col group">
+                                        <div class="${isImageValid ? 'bg-gray-200' : bgColorClass} h-48 relative flex items-center justify-center text-center overflow-hidden">
+                                            ${badgeHTML}
+                                            ${coverContent}
+                                        </div>
+                                        <div class="p-6 flex-grow flex flex-col bg-white">
+                                            <div class="text-[10px] font-bold text-[#0284c7] mb-2 tracking-widest">${matkul}</div>
+                                            <h4 class="text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">${judul}</h4>
+                                            <div class="flex items-center text-sm text-gray-500 mb-6 flex-grow">
+                                                <i class="fas fa-user-edit mr-2 text-gray-400"></i>
+                                                <span>${nama}</span>
+                                            </div>
+                                            <a href="${linkKarya}" target="_blank" class="block w-full text-center border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-2.5 px-4 rounded-lg transition-colors text-sm">
+                                                ${iconHTML}
+                                            </a>
+                                        </div>
+                                    </div>
+                                `;
+
+                                wadah.innerHTML += desainKartu;
+                            }
+
+                            if(!hasData) {
+                                 wadah.innerHTML = '<div class="col-span-full text-center p-8 text-gray-500 bg-gray-50 rounded-xl border border-gray-100">Belum ada karya yang diunggah. Jadilah yang pertama!</div>';
+                            }
+                        } catch(e) {
+                            console.error(e);
+                            document.getElementById('loading').classList.add('hidden');
+                            var err = document.getElementById('error-message');
+                            err.classList.remove('hidden');
+                            err.innerHTML += '<p class="text-xs mt-2 text-red-500">Gagal memproses data. Muat ulang halaman.</p>';
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <script src="https://docs.google.com/spreadsheets/d/1cAj7LoQb30i-u5icIbJumSckaG_xBSWzZMWRKoYBNa8/gviz/tq?tqx=out:json&gid=638619839" onerror="handleScriptError()"></script>
+</body>
+</html>
