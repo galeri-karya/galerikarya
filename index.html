@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SastraKarya - Galeri Mahasiswa</title>
-    <!-- Favicon agar Logo muncul di tab browser dan Google Search -->
-    <link rel="icon" type="image/jpeg" href="watermarked_img_10669811695132750567.jpg">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <!-- Memuat Tailwind CSS untuk Desain -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Memuat FontAwesome untuk Ikon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Animasi Loading */
         .loader { border-top-color: #3b82f6; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Animasi transisi halus saat pindah halaman */
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Animasi berputar lambat untuk cincin Instagram */
         .spin-slow { animation: spin 8s linear infinite; }
     </style>
 </head>
@@ -27,7 +24,7 @@
     <nav class="bg-[#194060] text-white py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-md">
         <!-- Logo Website -->
         <div class="flex items-center cursor-pointer bg-white px-3 py-1.5 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300" onclick="kembaliKeBeranda()">
-            <img src="watermarked_img_10669811695132750567.jpg" alt="Logo SastraKarya" class="h-8 md:h-10 w-auto object-contain" onerror="this.onerror=null; this.src=''; this.alt='SastraKarya'; this.className='text-[#194060] font-bold text-xl';">
+            <img src="logo.jpg" alt="Logo SastraKarya" class="h-8 md:h-10 w-auto object-contain" onerror="this.onerror=null; this.src=''; this.alt='SastraKarya'; this.className='text-[#194060] font-bold text-xl';">
         </div>
         
         <div class="hidden md:flex space-x-8 text-sm font-semibold text-gray-200">
@@ -249,7 +246,7 @@
             <div>
                 <div class="flex items-center space-x-3 mb-4">
                     <!-- Logo di Footer -->
-                    <img src="watermarked_img_10669811695132750567.jpg" alt="Logo SastraKarya" class="h-10 w-auto bg-white p-1.5 rounded-lg shadow-sm" onerror="this.onerror=null; this.src=''; this.alt='SastraKarya'; this.className='text-white font-bold text-lg';">
+                    <img src="logo.jpg" alt="Logo SastraKarya" class="h-10 w-auto bg-white p-1.5 rounded-lg shadow-sm" onerror="this.onerror=null; this.src=''; this.alt='SastraKarya'; this.className='text-white font-bold text-lg';">
                 </div>
                 <p class="text-gray-400 max-w-xs leading-relaxed">Menjadi ruang apresiasi digital bagi mahasiswa sastra untuk mempublikasikan gagasan, kritik, dan analisis dalam berbagai format kreatif.</p>
             </div>
