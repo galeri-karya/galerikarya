@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- OPTIMASI SEO GOOGLE (BARU) -->
+    <!-- VERIFIKASI GOOGLE SEARCH CONSOLE -->
+    <meta name="google-site-verification" content="rxVdPsbupv0NuxfnkwNI1C_pVZZbtCrSfk0rvGr8trE" />
+
+    <!-- OPTIMASI SEO GOOGLE -->
     <title>Galeri Karya Mahasiswa Sastra - SastraKarya</title>
     <meta name="description" content="Galeri Karya Mahasiswa Sastra: Wadah apresiasi dan publikasi pemikiran kritis, analitis, dan kreatif mahasiswa Universitas Negeri Medan dalam mengeksplorasi ilmu sastra dan bahasa.">
     <meta name="keywords" content="Galeri Karya Mahasiswa Sastra, SastraKarya, Karya Mahasiswa Sastra, Universitas Negeri Medan, Unimed, Sastra Indonesia, Apresiasi Sastra, AI dalam Sastra, Portofolio Mahasiswa">
     <meta name="author" content="Dosen dan Mahasiswa Sastra Unimed">
     <meta name="robots" content="index, follow">
 
-    <!-- OPTIMASI SOSIAL MEDIA (Agar muncul gambar/judul bagus saat link di-share) -->
+    <!-- OPTIMASI SOSIAL MEDIA -->
     <meta property="og:title" content="Galeri Karya Mahasiswa Sastra - SastraKarya">
     <meta property="og:description" content="Wadah apresiasi dan publikasi pemikiran kritis, analitis, dan kreatif mahasiswa sastra.">
     <meta property="og:image" content="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg">
     <meta property="og:url" content="https://galeri-karya.github.io/galerikarya/">
     <meta property="og:type" content="website">
 
-    <!-- Favicon dengan Jalur Paksa (Absolute URL) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg">
     
     <!-- Memuat Tailwind CSS untuk Desain -->
@@ -27,7 +30,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* Animasi */
         .loader { border-top-color: #3b82f6; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
@@ -39,7 +41,6 @@
 
     <!-- Navbar -->
     <nav class="bg-[#194060] text-white py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-md">
-        <!-- Logo Website: Diperbesar -->
         <a href="#beranda" onclick="kembaliKeBeranda('beranda')" class="flex items-center cursor-pointer bg-white px-3 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
             <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
                  onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
@@ -58,7 +59,6 @@
 
     <!-- KELOMPOK HALAMAN UTAMA (DASHBOARD) -->
     <div id="halaman-utama" class="fade-in">
-        <!-- Header / Hero Section -->
         <header id="beranda" class="bg-gradient-to-br from-[#1e3a5f] via-[#2c5f87] to-[#1e3a5f] text-white py-32 text-center relative shadow-lg">
             <div class="relative z-10 max-w-4xl mx-auto px-4">
                 <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">Galeri Karya <span class="text-[#38bdf8]">Mahasiswa Sastra</span></h1>
@@ -69,7 +69,6 @@
             </div>
         </header>
 
-        <!-- Mata Kuliah Section -->
         <section id="mata-kuliah" class="py-16 bg-white">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Mata Kuliah</h2>
@@ -143,7 +142,6 @@
             </div>
         </section>
 
-        <!-- KARYA SOROTAN / TERBARU -->
         <section id="karya-sorotan" class="py-16 bg-[#f8fafc] border-t border-gray-100">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2"><i class="fas fa-fire text-orange-500 mr-2"></i> Karya Sorotan</h2>
@@ -167,7 +165,6 @@
             </div>
         </section>
 
-        <!-- INTEGRASI PROJECT INSTAGRAM -->
         <section class="py-16 bg-white border-t border-gray-100 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-64 h-64 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 translate-x-1/2 -translate-y-1/2"></div>
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 -translate-x-1/2 translate-y-1/2"></div>
@@ -198,7 +195,6 @@
             </div>
         </section>
 
-        <!-- Submit Karya Section -->
         <section id="submit-karya" class="py-20 bg-[#e0f2fe] border-t border-blue-100">
             <div class="max-w-4xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Submit Karya Anda</h2>
@@ -307,7 +303,6 @@
         </div>
     </footer>
 
-    <!-- SKRIP MESIN UTAMA -->
     <script>
         var dataDatabaseKarya = [];
         var statusDomainSaatIni = 'SEMUA'; 
@@ -430,7 +425,6 @@
                 iconHTML = '<i class="fas fa-align-left mr-2"></i> Baca Esai';
             }
 
-            // PERBAIKAN FITUR: MENGUBAH TAUTAN GOOGLE DRIVE KE MODE PREVIEW AGAR AMAN
             var linkKaryaAman = item.linkKarya;
             if (linkKaryaAman && linkKaryaAman.indexOf('drive.google.com') !== -1) {
                 var matchLinkID = linkKaryaAman.match(/id=([a-zA-Z0-9_-]+)/) || linkKaryaAman.match(/d\/([a-zA-Z0-9_-]+)/);
