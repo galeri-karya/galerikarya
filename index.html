@@ -3,13 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SastraKarya - Galeri Mahasiswa</title>
+    
+    <!-- OPTIMASI SEO GOOGLE (BARU) -->
+    <title>Galeri Karya Mahasiswa Sastra - SastraKarya</title>
+    <meta name="description" content="Galeri Karya Mahasiswa Sastra: Wadah apresiasi dan publikasi pemikiran kritis, analitis, dan kreatif mahasiswa Universitas Negeri Medan dalam mengeksplorasi ilmu sastra dan bahasa.">
+    <meta name="keywords" content="Galeri Karya Mahasiswa Sastra, SastraKarya, Karya Mahasiswa Sastra, Universitas Negeri Medan, Unimed, Sastra Indonesia, Apresiasi Sastra, AI dalam Sastra, Portofolio Mahasiswa">
+    <meta name="author" content="Dosen dan Mahasiswa Sastra Unimed">
+    <meta name="robots" content="index, follow">
+
+    <!-- OPTIMASI SOSIAL MEDIA (Agar muncul gambar/judul bagus saat link di-share) -->
+    <meta property="og:title" content="Galeri Karya Mahasiswa Sastra - SastraKarya">
+    <meta property="og:description" content="Wadah apresiasi dan publikasi pemikiran kritis, analitis, dan kreatif mahasiswa sastra.">
+    <meta property="og:image" content="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg">
+    <meta property="og:url" content="https://galeri-karya.github.io/galerikarya/">
+    <meta property="og:type" content="website">
+
     <!-- Favicon dengan Jalur Paksa (Absolute URL) -->
     <link rel="icon" type="image/jpeg" href="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg">
+    
     <!-- Memuat Tailwind CSS untuk Desain -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Memuat FontAwesome untuk Ikon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         /* Animasi */
         .loader { border-top-color: #3b82f6; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
@@ -21,9 +37,9 @@
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 scroll-smooth">
 
-    <!-- Navbar: Menu 100% Aktif & Logo Diperbesar -->
+    <!-- Navbar -->
     <nav class="bg-[#194060] text-white py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-md">
-        <!-- Logo Website: Ukuran Proporsional & Jelas -->
+        <!-- Logo Website: Diperbesar -->
         <a href="#beranda" onclick="kembaliKeBeranda('beranda')" class="flex items-center cursor-pointer bg-white px-3 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
             <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
                  onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
@@ -53,7 +69,7 @@
             </div>
         </header>
 
-        <!-- Mata Kuliah Section: Efek Interaktif (Hover) Persis Gambar -->
+        <!-- Mata Kuliah Section -->
         <section id="mata-kuliah" class="py-16 bg-white">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Mata Kuliah</h2>
@@ -144,9 +160,9 @@
                 </div>
                 
                 <div class="mt-10 text-center">
-                    <button onclick="bukaDomain('SEMUA', 'Semua Karya Mahasiswa')" class="inline-flex items-center justify-center px-6 py-2.5 border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold rounded-full hover:bg-[#1e3a5f] hover:text-white transition-colors text-sm cursor-pointer">
+                    <a href="#halaman-domain" onclick="bukaDomain('SEMUA', 'Semua Karya Mahasiswa')" class="inline-flex items-center justify-center px-6 py-2.5 border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold rounded-full hover:bg-[#1e3a5f] hover:text-white transition-colors text-sm cursor-pointer">
                         Lihat Semua Karya <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
@@ -291,7 +307,7 @@
         </div>
     </footer>
 
-    <!-- SKRIP MESIN UTAMA (DIPERBAIKI) -->
+    <!-- SKRIP MESIN UTAMA -->
     <script>
         var dataDatabaseKarya = [];
         var statusDomainSaatIni = 'SEMUA'; 
@@ -338,7 +354,6 @@
             }
         };
 
-        // FUNGSI JALAN PINTAS YANG DIPERBAIKI (MENCEGAH ERROR KLIK)
         function kembaliKeBeranda(targetScrollId) {
             var halDomain = document.getElementById('halaman-domain');
             var halUtama = document.getElementById('halaman-utama');
@@ -349,7 +364,6 @@
             }
 
             if(targetScrollId) {
-                // Memberikan jeda 50 milidetik agar sistem browser mengenali halaman yang baru dibuka sebelum menggulir
                 setTimeout(function() {
                     var target = document.getElementById(targetScrollId);
                     if(target) {
@@ -416,6 +430,15 @@
                 iconHTML = '<i class="fas fa-align-left mr-2"></i> Baca Esai';
             }
 
+            // PERBAIKAN FITUR: MENGUBAH TAUTAN GOOGLE DRIVE KE MODE PREVIEW AGAR AMAN
+            var linkKaryaAman = item.linkKarya;
+            if (linkKaryaAman && linkKaryaAman.indexOf('drive.google.com') !== -1) {
+                var matchLinkID = linkKaryaAman.match(/id=([a-zA-Z0-9_-]+)/) || linkKaryaAman.match(/d\/([a-zA-Z0-9_-]+)/);
+                if (matchLinkID && matchLinkID[1]) {
+                    linkKaryaAman = 'https://drive.google.com/file/d/' + matchLinkID[1] + '/preview';
+                }
+            }
+
             var isImageValid = false;
             var coverContent = '';
             var fallbackHTML = '<h3 class="text-white text-xl font-medium leading-snug font-serif tracking-wide drop-shadow-md line-clamp-3 px-6">' + item.judul + '</h3>';
@@ -449,7 +472,7 @@
                             <i class="fas fa-user-edit mr-2 text-gray-400"></i>
                             <span>${item.nama}</span>
                         </div>
-                        <a href="${item.linkKarya}" target="_blank" class="block w-full text-center bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[#0284c7] hover:text-white hover:border-[#0284c7] font-medium py-3 px-4 rounded-xl transition-colors text-sm shadow-sm cursor-pointer">
+                        <a href="${linkKaryaAman}" target="_blank" class="block w-full text-center bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[#0284c7] hover:text-white hover:border-[#0284c7] font-medium py-3 px-4 rounded-xl transition-colors text-sm shadow-sm cursor-pointer">
                             ${iconHTML}
                         </a>
                     </div>
