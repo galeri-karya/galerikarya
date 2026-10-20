@@ -23,9 +23,9 @@
     <!-- Navbar -->
     <nav class="bg-[#194060] text-white py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-md">
         <a href="#beranda" onclick="kembaliKeBeranda('beranda')" class="flex items-center cursor-pointer bg-white px-3 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-            <!-- Perbaikan Logo yang Rusak -->
+            <!-- LOGO DIKEMBALIKAN KE ASLINYA -->
             <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
-                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=SK&background=194060&color=fff';" 
+                 onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
                  alt="Logo SastraKarya" 
                  class="h-10 md:h-14 w-auto object-contain">
         </a>
@@ -35,6 +35,7 @@
             <a href="#mata-kuliah" onclick="kembaliKeBeranda('mata-kuliah')" class="hover:text-white transition-colors">Akademik</a>
             <a href="#halaman-domain" onclick="bukaDomain('SEMUA', 'Semua Karya Mahasiswa')" class="hover:text-white transition-colors">Galeri</a>
             <a href="#submit-karya" onclick="kembaliKeBeranda('submit-karya')" class="text-[#38bdf8] font-bold hover:text-white transition-colors border-b-[3px] border-[#38bdf8] pb-1">Submit Karya</a>
+            <a href="#kontak" onclick="kembaliKeBeranda('kontak')" class="hover:text-white transition-colors">Kontak</a>
         </div>
     </nav>
 
@@ -103,7 +104,7 @@
             </div>
         </section>
 
-        <!-- ZONA AKADEMIK (DIKEMBALIKAN KE DESAIN ASLI) -->
+        <!-- ZONA AKADEMIK (DIKEMBALIKAN KE DESAIN ASLI YANG ELEGAN) -->
         <section id="mata-kuliah" class="py-16 bg-white border-t border-gray-100">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Repositori Akademik</h2>
@@ -147,10 +148,10 @@
                         </div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('AI dalam Bahasa', 'AI dalam Bahasa & Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
-                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-robot"></i></div>
-                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">AI dalam Bahasa & Sastra</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Eksplorasi persimpangan antara kecerdasan buatan dan linguistik/sastra, termasuk pemrosesan bahasa alami.</p>
+                    <a href="#halaman-domain" onclick="bukaDomain('Sastra Indonesia', 'Sastra Indonesia')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-book-open"></i></div>
+                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Sastra Indonesia</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Mendalami identitas, sejarah, dan struktur karya sastra yang lahir dan berkembang di wilayah Nusantara.</p>
                         <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
                             Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
                         </div>
@@ -211,14 +212,64 @@
         </div>
     </div>
 
-    <!-- MESIN PEMBACA DATA (SUDAH DIPERBAIKI 100%) -->
+    <!-- FOOTER KONTAK DIKEMBALIKAN -->
+    <footer id="kontak" class="bg-[#0f172a] text-gray-300 py-12 text-sm border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
+                         onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
+                         alt="Logo SastraKarya" 
+                         class="h-12 md:h-16 w-auto bg-white p-1.5 rounded-xl shadow-sm">
+                </div>
+                <p class="text-gray-400 max-w-xs leading-relaxed">Menjadi ruang apresiasi digital bagi mahasiswa sastra untuk mempublikasikan gagasan, kritik, dan analisis dalam berbagai format kreatif sebagai dukungan akreditasi prodi.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Mata Kuliah Terkait</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Psikologi Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Sastra Bandingan</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Apresiasi & Kritik Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> AI dalam Bahasa & Sastra</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Hubungi Kami</h4>
+                <div class="space-y-4 text-gray-400">
+                    <div class="flex items-start">
+                        <i class="fas fa-envelope text-blue-400 mt-1 mr-3 w-4"></i>
+                        <div>
+                            <p class="text-white">dosen.sastra@universitas.edu</p>
+                            <p class="text-xs text-gray-500 mt-0.5">Untuk pertanyaan seputar publikasi</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3 w-4"></i>
+                        <div>
+                            <a href="https://maps.google.com/?q=Fakultas+Bahasa+dan+Seni+Universitas+Negeri+Medan" target="_blank" class="text-white font-medium hover:text-[#38bdf8] transition-colors block">Fakultas Bahasa dan Seni Unimed</a>
+                            <p class="text-xs text-gray-500 mt-0.5">Jalan Willem Iskandar, Pasar V, Medan Estate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2026 Galeri Karya Mahasiswa Sastra. Hak Cipta Dilindungi.</p>
+            <div class="flex space-x-4 mt-4 md:mt-0">
+                <a href="https://www.instagram.com/aidalamsastra_/" target="_blank" class="text-gray-400 hover:text-pink-500 transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-globe"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MESIN PEMBACA DATA (SUDAH DISESUAIKAN DENGAN STRUKTUR KOLOM) -->
     <script>
         var dataDatabaseKarya = [];
         var statusDomainSaatIni = 'SEMUA'; 
         var kategoriFilterSaatIni = 'Semua';
 
         function muatDataDatabase() {
-            // HANYA MENGGUNAKAN SATU LINK (DATA TERBARU) AGAR TIDAK ERROR
             var urlBaru = "https://docs.google.com/spreadsheets/d/1ZoOQdU766hgwtHFZ7jUadaMDCoFmysdG7XWTOLmMcHo/gviz/tq?tqx=out:json";
 
             fetch(urlBaru)
@@ -228,33 +279,50 @@
                     var end = text.lastIndexOf('}');
                     var jsonStr = text.substring(start, end + 1);
                     var data = JSON.parse(jsonStr);
+                    var cols = data.table.cols;
                     var rows = data.table.rows;
                     
-                    var hasil = [];
+                    var colMap = {};
+                    for(var c=0; c<cols.length; c++) {
+                        if(cols[c] && cols[c].label) {
+                            var label = cols[c].label.toLowerCase();
+                            if(label.indexOf('nama lengkap') !== -1) colMap.nama = c;
+                            else if(label.indexOf('mata kuliah') !== -1) colMap.matkul = c;
+                            else if(label.indexOf('output') !== -1 || label.indexOf('kategori') !== -1) colMap.kategori = c;
+                            else if(label.indexOf('judul karya') !== -1) colMap.judul = c;
+                            else if(label.indexOf('file karya') !== -1 || label.indexOf('pdf') !== -1) colMap.linkKarya = c;
+                            else if(label.indexOf('gambar') !== -1 || label.indexOf('cover') !== -1) colMap.linkGambar = c;
+                            else if(label.indexOf('status publikasi') !== -1) colMap.status = c;
+                        }
+                    }
 
-                    // Menggunakan sistem deteksi tangguh (Fallback)
-                    for (var i = 1; i < rows.length; i++) {
+                    // Kalibrasi jika label berubah (Sesuai dengan kolom Excel Bapak/Ibu)
+                    if(colMap.nama === undefined) colMap.nama = 1;
+                    if(colMap.kategori === undefined) colMap.kategori = 4;
+                    if(colMap.judul === undefined) colMap.judul = 5;
+                    if(colMap.linkKarya === undefined) colMap.linkKarya = 7;
+                    if(colMap.linkGambar === undefined) colMap.linkGambar = 8;
+                    if(colMap.matkul === undefined) colMap.matkul = 10;
+                    if(colMap.status === undefined) colMap.status = 13;
+
+                    var hasil = [];
+                    for (var i = 0; i < rows.length; i++) {
                         var row = rows[i].c;
                         if (!row) continue;
                         
-                        // Menyesuaikan dengan standar data yang disalin ke Excel baru
-                        var nama = (row[1] && row[1].v) ? row[1].v : 'Tanpa Nama';
-                        var matkulAsli = (row[3] && row[3].v) ? row[3].v.toString().trim() : 'Umum';
-                        var kategori = (row[4] && row[4].v) ? row[4].v.toString().trim() : 'Karya';
-                        var judul = (row[5] && row[5].v) ? row[5].v.toString() : 'Tanpa Judul';
-                        var linkKarya = (row[6] && row[6].v) ? row[6].v : '';
-                        var linkGambar = (row[7] && row[7].v) ? row[7].v : '';
+                        var getVal = function(idx) {
+                            return (idx !== undefined && row[idx] && row[idx].v !== null) ? row[idx].v.toString().trim() : '';
+                        };
 
-                        // Mencari status "LAYAK TAYANG" di baris mana pun di bagian akhir kolom
-                        var statusPub = '';
-                        for(var x = row.length - 1; x >= Math.max(0, row.length - 4); x--) {
-                            if (row[x] && row[x].v && row[x].v.toString().toUpperCase().indexOf('LAYAK TAYANG') !== -1) {
-                                statusPub = 'LAYAK TAYANG';
-                                break;
-                            }
-                        }
-
-                        if (statusPub === 'LAYAK TAYANG' && linkKarya !== '') {
+                        var nama = getVal(colMap.nama) || 'Tanpa Nama';
+                        var matkulAsli = getVal(colMap.matkul) || 'Umum';
+                        var kategori = getVal(colMap.kategori) || 'Karya';
+                        var judul = getVal(colMap.judul) || 'Tanpa Judul';
+                        var linkKarya = getVal(colMap.linkKarya);
+                        var linkGambar = getVal(colMap.linkGambar);
+                        var statusPub = getVal(colMap.status).toUpperCase();
+                        
+                        if (statusPub.indexOf('LAYAK TAYANG') !== -1 && linkKarya !== '') {
                             hasil.push({ 
                                 nama: nama, 
                                 matkulAsli: matkulAsli, 
