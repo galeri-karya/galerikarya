@@ -5,70 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="rxVdPsbupv0NuxfnkwNI1C_pVZZbtCrSfk0rvGr8trE" />
     <title>Galeri Karya Mahasiswa Sastra - SastraKarya</title>
-    <meta name="description" content="Pusat portofolio dan karya mahasiswa sastra Universitas Negeri Medan. Menyajikan artikel ilmiah, esai, dan animasi AI.">
+    <meta name="description" content="Pusat portofolio dan karya mahasiswa sastra Universitas Negeri Medan.">
     
+    <!-- LIBRARY EXTERNAL -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <style>
         .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .spin-slow { animation: spin 8s linear infinite; }
+        .cell-kalkulasi { background-color: #f8fafc; color: #475569; font-weight: 600; }
+        .flash-save { animation: flash 0.8s ease-out; }
+        @keyframes flash { 0% { background-color: #a7f3d0; } 100% { background-color: transparent; } }
     </style>
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 scroll-smooth">
 
-    <!-- Navbar -->
+    <!-- 1. NAVBAR PENGATURAN -->
     <nav class="bg-[#194060] text-white py-4 px-8 flex justify-between items-center sticky top-0 z-50 shadow-md">
-        <a href="#beranda" onclick="kembaliKeBeranda('beranda')" class="flex items-center cursor-pointer bg-white px-3 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-            <!-- LOGO DIKEMBALIKAN KE ASLINYA -->
+        <a href="#beranda" onclick="bukaHalaman('utama')" class="flex items-center cursor-pointer bg-white px-3 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
             <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
-                 onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
+                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=SK&background=194060&color=fff';" 
                  alt="Logo SastraKarya" 
                  class="h-10 md:h-14 w-auto object-contain">
         </a>
         <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-200">
-            <a href="#beranda" onclick="kembaliKeBeranda('beranda')" class="hover:text-white transition-colors">Beranda</a>
-            <a href="#museum-nusantara" onclick="kembaliKeBeranda('museum-nusantara')" class="text-orange-400 hover:text-orange-300 transition-colors"><i class="fas fa-landmark mr-1"></i> Museum Nusantara</a>
-            <a href="#mata-kuliah" onclick="kembaliKeBeranda('mata-kuliah')" class="hover:text-white transition-colors">Akademik</a>
+            <a href="#beranda" onclick="bukaHalaman('utama')" class="hover:text-white transition-colors">Beranda</a>
+            <a href="#museum-nusantara" onclick="bukaHalaman('utama', 'museum-nusantara')" class="text-orange-400 hover:text-orange-300 transition-colors"><i class="fas fa-landmark mr-1"></i> Museum Nusantara</a>
+            <a href="#mata-kuliah" onclick="bukaHalaman('utama', 'mata-kuliah')" class="hover:text-white transition-colors">Akademik</a>
             <a href="#halaman-domain" onclick="bukaDomain('SEMUA', 'Semua Karya Mahasiswa')" class="hover:text-white transition-colors">Galeri</a>
-            <a href="#submit-karya" onclick="kembaliKeBeranda('submit-karya')" class="text-[#38bdf8] font-bold hover:text-white transition-colors border-b-[3px] border-[#38bdf8] pb-1">Submit Karya</a>
-            <a href="#kontak" onclick="kembaliKeBeranda('kontak')" class="hover:text-white transition-colors">Kontak</a>
+            
+            <a href="javascript:void(0)" onclick="cekAksesPenilaian()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg transition-colors flex items-center shadow-sm border border-emerald-400 cursor-pointer">
+                <i class="fas fa-lock mr-2 text-emerald-200"></i> Penilaian OBE
+            </a>
+            
+            <a href="#submit-karya" onclick="bukaHalaman('utama', 'submit-karya')" class="text-[#38bdf8] font-bold hover:text-white transition-colors border-b-[3px] border-[#38bdf8] pb-1">Submit Karya</a>
         </div>
     </nav>
 
-    <!-- HALAMAN UTAMA -->
-    <div id="halaman-utama" class="fade-in">
+    <!-- 2. MODAL KEAMANAN PIN DOSEN -->
+    <div id="modal-pin" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex justify-center items-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 transform transition-all text-center">
+            <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Akses Dosen</h3>
+            <p class="text-sm text-gray-500 mb-6">Masukkan PIN Rahasia Anda untuk membuka Dasbor Penilaian OBE.</p>
+            <div class="relative mb-4">
+                <input type="password" id="input-pin" onkeypress="handleEnterPIN(event)" class="w-full text-center text-2xl tracking-[0.5em] font-bold border-2 border-gray-200 rounded-xl py-3 px-4 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all" placeholder="••••••">
+                <p id="pesan-error-pin" class="hidden absolute -bottom-6 left-0 right-0 text-xs font-bold text-red-500 text-center animate-pulse">PIN Salah! Akses Ditolak.</p>
+            </div>
+            <div class="flex gap-3 mt-8">
+                <button onclick="tutupModalPIN()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition-colors">Batal</button>
+                <button onclick="validasiPIN()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors shadow-lg shadow-emerald-500/30">Buka Dasbor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. HALAMAN UTAMA (Beranda, Museum, Sorotan, Repositori) -->
+    <div id="halaman-utama" class="fade-in block">
         <header id="beranda" class="bg-gradient-to-br from-[#1e3a5f] via-[#2c5f87] to-[#1e3a5f] text-white py-24 text-center relative shadow-lg">
             <div class="relative z-10 max-w-4xl mx-auto px-4">
                 <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">Pusat Literasi & <span class="text-[#38bdf8]">Karya Sastra</span></h1>
                 <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto mb-10 font-normal leading-relaxed">Ekosistem digital portofolio mahasiswa, repositori akreditasi kampus, dan pelestarian budaya Nusantara.</p>
-                
-                <!-- DASBOR STATISTIK LIVE -->
                 <div class="grid grid-cols-3 gap-4 max-w-2xl mx-auto bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl mb-10">
-                    <div>
-                        <div id="stat-karya" class="text-3xl font-bold text-[#38bdf8]">0</div>
-                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Total Karya</div>
-                    </div>
-                    <div class="border-l border-r border-white/20">
-                        <div id="stat-mahasiswa" class="text-3xl font-bold text-orange-400">0</div>
-                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Penulis Aktif</div>
-                    </div>
-                    <div>
-                        <div id="stat-matkul" class="text-3xl font-bold text-pink-400">0</div>
-                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Mata Kuliah</div>
-                    </div>
+                    <div><div id="stat-karya" class="text-3xl font-bold text-[#38bdf8]">0</div><div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Total Karya</div></div>
+                    <div class="border-l border-r border-white/20"><div id="stat-mahasiswa" class="text-3xl font-bold text-orange-400">0</div><div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Penulis Aktif</div></div>
+                    <div><div id="stat-matkul" class="text-3xl font-bold text-pink-400">0</div><div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Mata Kuliah</div></div>
                 </div>
-
-                <a href="#mata-kuliah" onclick="kembaliKeBeranda('mata-kuliah')" class="inline-flex items-center justify-center px-8 py-3.5 bg-white text-[#1e3a5f] font-bold rounded-full hover:bg-gray-100 transition-colors shadow-md text-sm uppercase tracking-wider cursor-pointer">
+                <a href="#mata-kuliah" onclick="bukaHalaman('utama', 'mata-kuliah')" class="inline-flex items-center justify-center px-8 py-3.5 bg-white text-[#1e3a5f] font-bold rounded-full hover:bg-gray-100 transition-colors shadow-md text-sm uppercase tracking-wider cursor-pointer">
                     Mulai Eksplorasi <i class="fas fa-arrow-down ml-2"></i>
                 </a>
             </div>
         </header>
 
-        <!-- ZONA MUSEUM NUSANTARA -->
         <section id="museum-nusantara" class="py-16 bg-[#fffbeb] border-b border-orange-100 relative overflow-hidden">
             <div class="absolute -right-20 -top-20 text-orange-500/10 text-[200px]"><i class="fas fa-landmark"></i></div>
             <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
@@ -77,34 +90,24 @@
                 </div>
                 <h2 class="text-4xl font-extrabold text-[#78350f] mb-4">Museum Budaya & Animasi AI</h2>
                 <p class="text-[#92400e] mb-10 max-w-2xl mx-auto text-sm leading-relaxed">Ruang pameran khusus untuk karya-karya pelestarian sastra lisan, cerita rakyat, dan visualisasi Nusantara menggunakan teknologi Kecerdasan Buatan.</p>
-                <a href="#halaman-domain" onclick="bukaDomain('MUSEUM', 'Museum Sastra Nusantara')" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-2xl hover:scale-105 transition-transform shadow-xl text-lg cursor-pointer group">
+                <a href="javascript:void(0)" onclick="bukaDomain('MUSEUM', 'Museum Sastra Nusantara')" class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-2xl hover:scale-105 transition-transform shadow-xl text-lg cursor-pointer group">
                     <i class="fas fa-door-open mr-3 group-hover:animate-pulse"></i> Masuk ke Museum Digital
                 </a>
             </div>
         </section>
 
-        <!-- KARYA SOROTAN -->
         <section id="karya-sorotan" class="py-16 bg-[#f8fafc] border-t border-gray-100">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2"><i class="fas fa-fire text-orange-500 mr-2"></i> Karya Sorotan</h2>
                 <div class="w-16 h-1 bg-orange-500 mx-auto mb-6"></div>
-                <p class="text-gray-500 mb-12 max-w-2xl mx-auto text-sm">Temukan inspirasi dari deretan karya mahasiswa paling baru yang diunggah ke dalam galeri.</p>
-                
                 <div id="wadah-sorotan-loading" class="flex flex-col justify-center items-center py-6">
                     <div class="loader rounded-full border-4 border-gray-200 h-8 w-8 mb-3"></div>
                     <p class="text-gray-400 text-xs mt-3">Mengambil data dari Brankas...</p>
                 </div>
                 <div id="wadah-karya-sorotan" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left"></div>
-                
-                <div class="mt-10 text-center">
-                    <a href="#halaman-domain" onclick="bukaDomain('SEMUA', 'Semua Karya Mahasiswa')" class="inline-flex items-center justify-center px-6 py-2.5 border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold rounded-full hover:bg-[#1e3a5f] hover:text-white transition-colors text-sm cursor-pointer">
-                        Lihat Semua Karya <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
             </div>
         </section>
 
-        <!-- ZONA AKADEMIK (DIKEMBALIKAN KE DESAIN ASLI YANG ELEGAN) -->
         <section id="mata-kuliah" class="py-16 bg-white border-t border-gray-100">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Repositori Akademik</h2>
@@ -112,64 +115,51 @@
                 <p class="text-gray-500 mb-12 max-w-2xl mx-auto text-sm">Ruang lingkup keilmuan yang menjadi dasar lahirnya karya-karya luar biasa dari para mahasiswa. Silakan klik salah satu mata kuliah di bawah ini.</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-                    <a href="#halaman-domain" onclick="bukaDomain('Psikologi Sastra', 'Psikologi Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Psikologi Sastra', 'Psikologi Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-brain"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Psikologi Sastra</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Mengkaji keterkaitan antara kejiwaan manusia, proses kreatif pengarang, dan manifestasi psikologis dalam karya sastra.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('Sastra Bandingan', 'Sastra Bandingan')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Sastra Bandingan', 'Sastra Bandingan')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-globe"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Sastra Bandingan</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Studi komparatif karya sastra melintasi batas negara, bahasa, dan disiplin ilmu untuk menemukan universalitas.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('Apresiasi dan Kritik Sastra', 'Apresiasi & Kritik Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Apresiasi dan Kritik Sastra', 'Apresiasi & Kritik Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-pen-nib"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Apresiasi & Kritik Sastra</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Melatih ketajaman analisis dan evaluasi karya sastra dengan menggunakan berbagai pendekatan dan teori kritis.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('Kajian Ilmu Sastra', 'Kajian Ilmu Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Kajian Ilmu Sastra', 'Kajian Ilmu Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-book-reader"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Kajian Ilmu Sastra</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Pemahaman mendalam mengenai ontologi, epistemologi, dan aksiologi ilmu sastra sebagai dasar penelitian akademis.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('Sastra Indonesia', 'Sastra Indonesia')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Sastra Indonesia', 'Sastra Indonesia')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-book-open"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Sastra Indonesia</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Mendalami identitas, sejarah, dan struktur karya sastra yang lahir dan berkembang di wilayah Nusantara.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="#halaman-domain" onclick="bukaDomain('Sastra Cyber', 'Sastra Cyber')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Sastra Cyber', 'Sastra Cyber')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-network-wired"></i></div>
                         <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Sastra Cyber</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Menganalisis fenomena sastra di ruang digital, mencakup hiperteks, sastra media sosial, dan dinamika pembaca maya.</p>
-                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">
-                            Lihat Repositori <i class="fas fa-arrow-right ml-1"></i>
-                        </div>
+                        <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- FORM BARU -->
         <section id="submit-karya" class="py-20 bg-[#e0f2fe] border-t border-blue-100">
             <div class="max-w-4xl mx-auto px-4 text-center">
                 <h2 class="text-3xl font-bold text-[#1e3a5f] mb-2">Submit Karya Baru</h2>
@@ -181,11 +171,11 @@
         </section>
     </div>
 
-    <!-- HALAMAN DOMAIN KHUSUS (GALERI) -->
+    <!-- 4. HALAMAN DOMAIN KHUSUS (GALERI KARYA) -->
     <div id="halaman-domain" class="hidden fade-in min-h-screen bg-gray-50 pb-20">
         <div class="bg-gradient-to-r from-[#194060] to-[#2c5f87] py-12 shadow-inner relative">
             <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
-                <a href="#beranda" onclick="kembaliKeBeranda()" class="mb-6 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors text-xs font-semibold inline-flex items-center backdrop-blur-sm border border-white/20 cursor-pointer">
+                <a href="javascript:void(0)" onclick="bukaHalaman('utama')" class="mb-6 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors text-xs font-semibold inline-flex items-center backdrop-blur-sm border border-white/20 cursor-pointer">
                     <i class="fas fa-arrow-left mr-2"></i> Kembali ke Beranda Utama
                 </a>
                 <h2 id="teks-judul-domain" class="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md">Nama Mata Kuliah</h2>
@@ -193,32 +183,98 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 text-center mt-10">
-            <!-- KOLOM PENCARIAN -->
             <div class="max-w-2xl mx-auto mb-8 relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
-                </div>
-                <input type="text" id="inputPencarian" onkeyup="jalankanPencarian()" placeholder="Cari judul karya atau nama mahasiswa..." class="w-full pl-12 pr-4 py-4 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all text-gray-700 outline-none shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-search text-gray-400"></i></div>
+                <input type="text" id="inputPencarian" onkeyup="jalankanPencarian()" placeholder="Cari judul karya atau nama mahasiswa..." class="w-full pl-12 pr-4 py-4 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none shadow-sm">
             </div>
-
             <div class="flex flex-wrap justify-center gap-3 mb-12" id="wadah-tombol-filter">
-                <button onclick="terapkanFilter('Semua')" id="btn-Semua" class="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md transition-colors cursor-pointer">Semua Output</button>
-                <button onclick="terapkanFilter('Buku Saku')" id="btn-Buku Saku" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm transition-colors cursor-pointer">Buku Saku</button>
-                <button onclick="terapkanFilter('Artikel Ilmiah')" id="btn-Artikel Ilmiah" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm transition-colors cursor-pointer">Artikel Ilmiah</button>
-                <button onclick="terapkanFilter('Video')" id="btn-Video" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm transition-colors cursor-pointer">Video Animasi</button>
+                <button onclick="terapkanFilter('Semua')" id="btn-Semua" class="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md">Semua Output</button>
+                <button onclick="terapkanFilter('Buku Saku')" id="btn-Buku Saku" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Buku Saku</button>
+                <button onclick="terapkanFilter('Artikel Ilmiah')" id="btn-Artikel Ilmiah" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Artikel Ilmiah</button>
+                <button onclick="terapkanFilter('Video')" id="btn-Video" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Video Animasi</button>
             </div>
-
             <div id="wadah-karya-domain" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left"></div>
         </div>
     </div>
 
-    <!-- FOOTER KONTAK DIKEMBALIKAN -->
-    <footer id="kontak" class="bg-[#0f172a] text-gray-300 py-12 text-sm border-t border-gray-800">
+    <!-- 5. HALAMAN PENILAIAN OBE DOSEN -->
+    <div id="halaman-penilaian" class="hidden fade-in min-h-screen bg-gray-100 pb-20">
+        <div class="bg-emerald-800 py-12 shadow-md relative">
+            <div class="max-w-7xl mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center justify-between">
+                <div>
+                    <a href="javascript:void(0)" onclick="keluarDariPenilaian()" class="mb-4 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors text-xs font-semibold inline-flex items-center cursor-pointer">
+                        <i class="fas fa-lock mr-2"></i> Tutup & Kunci Dasbor
+                    </a>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Dasbor Penilaian OBE</h2>
+                    <p class="text-emerald-200 mt-2 text-sm flex items-center">
+                        <i class="fas fa-shield-alt mr-2"></i> Secured | Auto-Save Multi-Mata Kuliah
+                    </p>
+                </div>
+                <div class="mt-6 md:mt-0 text-right flex flex-wrap gap-2 justify-end">
+                    <label class="bg-white text-emerald-800 font-bold px-5 py-2.5 rounded-lg shadow-md hover:bg-emerald-50 transition-colors cursor-pointer inline-flex items-center">
+                        <i class="fas fa-file-upload mr-2 text-lg"></i> Unggah Kelas Baru
+                        <input type="file" class="hidden" accept=".xlsx, .xls" onchange="tanganiUnggahExcel(event)">
+                    </label>
+                    <button onclick="unduhExcelOBE()" class="bg-amber-500 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:bg-amber-400 transition-colors inline-flex items-center">
+                        <i class="fas fa-download mr-2 text-lg"></i> Unduh Hasil
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 mt-8">
+            <div id="wadah-draft" class="hidden mb-6 bg-white rounded-xl shadow-sm border border-emerald-200 p-4">
+                <h3 class="text-sm font-bold text-gray-700 mb-3"><i class="fas fa-history text-emerald-600 mr-2"></i> Lanjutkan Penilaian Kelas Tersimpan:</h3>
+                <div id="list-draft" class="flex flex-wrap gap-3"></div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <div id="info-status-file" class="text-sm font-semibold text-gray-600">
+                        <i class="fas fa-exclamation-circle text-orange-400 mr-1"></i> Belum ada kelas yang aktif.
+                    </div>
+                    <span id="indikator-simpan" class="text-xs font-bold text-emerald-600 opacity-0 transition-opacity"><i class="fas fa-check mr-1"></i> Tersimpan otomatis</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-inner">
+                    <table id="tabel-obe" class="min-w-full bg-white text-sm">
+                        <thead id="header-tabel-obe" class="bg-emerald-100 text-emerald-900">
+                            <tr>
+                                <th class="py-3 px-4 text-center border-b font-semibold w-12">No</th>
+                                <th class="py-3 px-4 text-left border-b font-semibold w-40">NIM</th>
+                                <th class="py-3 px-4 text-left border-b font-semibold">Nama Mahasiswa</th>
+                                <th class="py-3 px-4 text-center border-b font-semibold">F1 <span class="text-[10px] font-normal block">(5%)</span></th>
+                                <th class="py-3 px-4 text-center border-b font-semibold">F2 <span class="text-[10px] font-normal block">(20%)</span></th>
+                                <th class="py-3 px-4 text-center border-b font-semibold">F3 <span class="text-[10px] font-normal block">(25%)</span></th>
+                                <th class="py-3 px-4 text-center border-b font-semibold">F4 <span class="text-[10px] font-normal block">(50%)</span></th>
+                                <th class="py-3 px-4 text-center border-b font-semibold">Sikap</th>
+                                <th class="py-3 px-4 text-center border-b font-bold text-emerald-800">Nilai Akhir</th>
+                                <th class="py-3 px-4 text-center border-b font-bold text-emerald-800">Grade</th>
+                                <th class="py-3 px-4 text-center border-b font-bold text-emerald-800">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody id="badan-tabel-obe" class="text-gray-700">
+                            <tr>
+                                <td colspan="11" class="py-16 text-center text-gray-400 bg-gray-50/50">
+                                    <i class="fas fa-file-excel text-5xl mb-4 text-gray-300"></i><br>
+                                    <p class="font-medium text-gray-500">Daftar Mahasiswa Masih Kosong</p>
+                                    <p class="text-xs mt-1">Silakan Unggah Kelas Baru atau Pilih Draft Tersimpan di atas.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. FOOTER KONTAK GLOBAL -->
+    <footer id="footer-global" class="bg-[#0f172a] text-gray-300 py-12 text-sm border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
                 <div class="flex items-center space-x-3 mb-4">
                     <img src="https://galeri-karya.github.io/galerikarya/watermarked_img_10669811695132750567.jpg" 
-                         onerror="this.onerror=null; this.src='https://galeri-karya.github.io/galerikarya/logo.jpg';" 
+                         onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=SK&background=194060&color=fff';" 
                          alt="Logo SastraKarya" 
                          class="h-12 md:h-16 w-auto bg-white p-1.5 rounded-xl shadow-sm">
                 </div>
@@ -230,7 +286,7 @@
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Psikologi Sastra</li>
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Sastra Bandingan</li>
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Apresiasi & Kritik Sastra</li>
-                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> AI dalam Bahasa & Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Kajian Ilmu Sastra</li>
                 </ul>
             </div>
             <div>
@@ -263,230 +319,283 @@
         </div>
     </footer>
 
-    <!-- MESIN PEMBACA DATA (SUDAH DISESUAIKAN DENGAN STRUKTUR KOLOM) -->
+    <!-- ======================================================================= -->
+    <!-- 7. MESIN JAVASCRIPT GLOBAL (TUNGGAL & BERSIH)                           -->
+    <!-- ======================================================================= -->
     <script>
-        var dataDatabaseKarya = [];
-        var statusDomainSaatIni = 'SEMUA'; 
-        var kategoriFilterSaatIni = 'Semua';
+        // INISIALISASI SAAT HALAMAN DIBUKA
+        document.addEventListener('DOMContentLoaded', function() {
+            muatDataDatabase();
+        });
 
-        function muatDataDatabase() {
-            var urlBaru = "https://docs.google.com/spreadsheets/d/1ZoOQdU766hgwtHFZ7jUadaMDCoFmysdG7XWTOLmMcHo/gviz/tq?tqx=out:json";
+        // -----------------------------------------------------------------------
+        // A. SISTEM KEAMANAN (PIN DOSEN) & ROUTING HALAMAN
+        // -----------------------------------------------------------------------
+        var PIN_HASH_SHA256 = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"; 
 
-            fetch(urlBaru)
-                .then(function(res) { return res.text(); })
-                .then(function(text) {
-                    var start = text.indexOf('{');
-                    var end = text.lastIndexOf('}');
-                    var jsonStr = text.substring(start, end + 1);
-                    var data = JSON.parse(jsonStr);
-                    var cols = data.table.cols;
-                    var rows = data.table.rows;
-                    
-                    var colMap = {};
-                    for(var c=0; c<cols.length; c++) {
-                        if(cols[c] && cols[c].label) {
-                            var label = cols[c].label.toLowerCase();
-                            if(label.indexOf('nama lengkap') !== -1) colMap.nama = c;
-                            else if(label.indexOf('mata kuliah') !== -1) colMap.matkul = c;
-                            else if(label.indexOf('output') !== -1 || label.indexOf('kategori') !== -1) colMap.kategori = c;
-                            else if(label.indexOf('judul karya') !== -1) colMap.judul = c;
-                            else if(label.indexOf('file karya') !== -1 || label.indexOf('pdf') !== -1) colMap.linkKarya = c;
-                            else if(label.indexOf('gambar') !== -1 || label.indexOf('cover') !== -1) colMap.linkGambar = c;
-                            else if(label.indexOf('status publikasi') !== -1) colMap.status = c;
-                        }
-                    }
-
-                    // Kalibrasi jika label berubah (Sesuai dengan kolom Excel Bapak/Ibu)
-                    if(colMap.nama === undefined) colMap.nama = 1;
-                    if(colMap.kategori === undefined) colMap.kategori = 4;
-                    if(colMap.judul === undefined) colMap.judul = 5;
-                    if(colMap.linkKarya === undefined) colMap.linkKarya = 7;
-                    if(colMap.linkGambar === undefined) colMap.linkGambar = 8;
-                    if(colMap.matkul === undefined) colMap.matkul = 10;
-                    if(colMap.status === undefined) colMap.status = 13;
-
-                    var hasil = [];
-                    for (var i = 0; i < rows.length; i++) {
-                        var row = rows[i].c;
-                        if (!row) continue;
-                        
-                        var getVal = function(idx) {
-                            return (idx !== undefined && row[idx] && row[idx].v !== null) ? row[idx].v.toString().trim() : '';
-                        };
-
-                        var nama = getVal(colMap.nama) || 'Tanpa Nama';
-                        var matkulAsli = getVal(colMap.matkul) || 'Umum';
-                        var kategori = getVal(colMap.kategori) || 'Karya';
-                        var judul = getVal(colMap.judul) || 'Tanpa Judul';
-                        var linkKarya = getVal(colMap.linkKarya);
-                        var linkGambar = getVal(colMap.linkGambar);
-                        var statusPub = getVal(colMap.status).toUpperCase();
-                        
-                        if (statusPub.indexOf('LAYAK TAYANG') !== -1 && linkKarya !== '') {
-                            hasil.push({ 
-                                nama: nama, 
-                                matkulAsli: matkulAsli, 
-                                matkulFilter: matkulAsli.toUpperCase(), 
-                                kategori: kategori, 
-                                judul: judul.replace(/"/g, '&quot;'), 
-                                linkKarya: linkKarya, 
-                                linkGambar: linkGambar 
-                            });
-                        }
-                    }
-
-                    dataDatabaseKarya = hasil;
-                    var loading = document.getElementById('wadah-sorotan-loading');
-                    if(loading) loading.classList.add('hidden');
-                    
-                    hitungStatistik();
-                    renderKaryaSorotan();
-                })
-                .catch(function(err) {
-                    console.error("Error Sistem Data:", err);
-                    var loading = document.getElementById('wadah-sorotan-loading');
-                    if(loading) loading.innerHTML = '<p class="text-red-500 text-sm">Gagal memuat data. Mohon muat ulang halaman.</p>';
-                    document.getElementById('stat-karya').innerText = "Err";
-                });
-        }
-
-        function hitungStatistik() {
-            document.getElementById('stat-karya').innerText = dataDatabaseKarya.length;
-            var arrayPenulis = [];
-            var arrayMatkul = [];
-            for(var i=0; i<dataDatabaseKarya.length; i++) {
-                var nama = dataDatabaseKarya[i].nama;
-                var matkul = dataDatabaseKarya[i].matkulFilter;
-                if(arrayPenulis.indexOf(nama) === -1) arrayPenulis.push(nama);
-                if(arrayMatkul.indexOf(matkul) === -1 && matkul !== 'UMUM') arrayMatkul.push(matkul);
+        function cekAksesPenilaian() {
+            if(sessionStorage.getItem('akses_dosen_unimed') === 'diizinkan') {
+                bukaHalaman('penilaian');
+            } else {
+                document.getElementById('modal-pin').classList.remove('hidden');
+                setTimeout(() => document.getElementById('input-pin').focus(), 100);
             }
-            document.getElementById('stat-mahasiswa').innerText = arrayPenulis.length;
-            document.getElementById('stat-matkul').innerText = arrayMatkul.length;
         }
 
-        document.addEventListener('DOMContentLoaded', muatDataDatabase);
+        async function validasiPIN() {
+            var input = document.getElementById('input-pin').value;
+            const msgBuffer = new TextEncoder().encode(input);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-        function kembaliKeBeranda(targetId) {
-            document.getElementById('halaman-domain').classList.add('hidden');
-            document.getElementById('halaman-utama').classList.remove('hidden');
-            if(targetId) setTimeout(() => document.getElementById(targetId).scrollIntoView({behavior: 'smooth'}), 50);
-            else window.scrollTo(0,0);
+            if(hashHex === PIN_HASH_SHA256) {
+                sessionStorage.setItem('akses_dosen_unimed', 'diizinkan');
+                document.getElementById('modal-pin').classList.add('hidden');
+                document.getElementById('input-pin').value = '';
+                bukaHalaman('penilaian');
+            } else {
+                var pesan = document.getElementById('pesan-error-pin');
+                pesan.classList.remove('hidden');
+                setTimeout(() => pesan.classList.add('hidden'), 3000);
+            }
         }
 
-        function bukaDomain(idMatkulFilter, judulTampil) {
-            statusDomainSaatIni = idMatkulFilter.toUpperCase();
+        function tutupModalPIN() {
+            document.getElementById('modal-pin').classList.add('hidden');
+            document.getElementById('input-pin').value = '';
+        }
+
+        function handleEnterPIN(event) { if (event.key === "Enter") validasiPIN(); }
+
+        function keluarDariPenilaian() {
+            sessionStorage.removeItem('akses_dosen_unimed');
+            bukaHalaman('utama');
+        }
+
+        function bukaHalaman(halaman, targetId) {
             document.getElementById('halaman-utama').classList.add('hidden');
-            document.getElementById('halaman-domain').classList.remove('hidden');
-            document.getElementById('teks-judul-domain').innerText = judulTampil;
-            document.getElementById('inputPencarian').value = ''; 
-            window.scrollTo(0,0);
-            terapkanFilter('Semua');
+            document.getElementById('halaman-domain').classList.add('hidden');
+            document.getElementById('halaman-penilaian').classList.add('hidden');
+            document.getElementById('footer-global').classList.remove('hidden'); 
+            
+            if (halaman === 'utama') {
+                document.getElementById('halaman-utama').classList.remove('hidden');
+                if(targetId) setTimeout(() => document.getElementById(targetId).scrollIntoView({behavior: 'smooth'}), 50);
+                else window.scrollTo(0,0);
+            } else if (halaman === 'domain') { 
+                document.getElementById('halaman-domain').classList.remove('hidden');
+                window.scrollTo(0,0);
+            } else if (halaman === 'penilaian') { 
+                document.getElementById('halaman-penilaian').classList.remove('hidden'); 
+                document.getElementById('footer-global').classList.add('hidden'); // Sembunyikan footer di dasbor dosen
+                window.scrollTo(0,0); 
+                muatDaftarDraft(); 
+            }
         }
 
-        function terapkanFilter(jenisKategori) {
-            kategoriFilterSaatIni = jenisKategori;
-            var idTombol = ['btn-Semua', 'btn-Buku Saku', 'btn-Artikel Ilmiah', 'btn-Video'];
-            for(var b=0; b<idTombol.length; b++) {
-                var btn = document.getElementById(idTombol[b]);
-                if(btn) btn.className = "btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm cursor-pointer"; 
+        // -----------------------------------------------------------------------
+        // B. MESIN OBE UNIMED (AUTO-SAVE, WARNA GRADE, EXPORT EXCEL)
+        // -----------------------------------------------------------------------
+        var originalExcelData = []; var fileAsliName = ""; var namaSheetAsli = "Sheet1";
+        var headerRowIndex = -1; var mapKolom = {};
+
+        function simpanKeDraft() {
+            if(!fileAsliName || originalExcelData.length === 0) return;
+            var draftData = { fileAsliName: fileAsliName, namaSheetAsli: namaSheetAsli, headerRowIndex: headerRowIndex, mapKolom: mapKolom, data: originalExcelData, waktu: new Date().toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit', second:'2-digit' }) };
+            localStorage.setItem("OBE_Draft_" + fileAsliName, JSON.stringify(draftData));
+            var indikator = document.getElementById('indikator-simpan');
+            indikator.style.opacity = "1"; setTimeout(() => { indikator.style.opacity = "0"; }, 2000);
+            muatDaftarDraft();
+        }
+
+        function muatDaftarDraft() {
+            var wadah = document.getElementById('wadah-draft'); var list = document.getElementById('list-draft');
+            list.innerHTML = ''; var adaDraft = false;
+            for(var i=0; i<localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if(key.startsWith("OBE_Draft_")) {
+                    adaDraft = true; var draft = JSON.parse(localStorage.getItem(key));
+                    list.innerHTML += `<div class="bg-gray-50 border border-emerald-200 rounded-lg p-2.5 flex items-center shadow-sm w-full md:w-auto hover:bg-emerald-50 transition-colors"><i class="fas fa-table text-emerald-500 text-xl mr-3"></i><div class="flex-grow mr-4"><p class="font-bold text-xs text-gray-800 truncate max-w-[150px]">${draft.fileAsliName}</p><p class="text-[10px] text-gray-500">Tersimpan: ${draft.waktu}</p></div><button onclick="lanjutkanDraft('${key}')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-1.5 rounded text-xs font-bold transition-colors mr-1">Lanjutkan</button><button onclick="hapusDraft('${key}')" class="bg-red-100 hover:bg-red-200 text-red-600 px-2.5 py-1.5 rounded text-xs transition-colors"><i class="fas fa-times"></i></button></div>`;
+                }
             }
-            var btnAktif = document.getElementById('btn-' + jenisKategori);
-            if(btnAktif) btnAktif.className = "btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md cursor-pointer";
+            if(adaDraft) wadah.classList.remove('hidden'); else wadah.classList.add('hidden');
+        }
+
+        function lanjutkanDraft(key) {
+            var draft = JSON.parse(localStorage.getItem(key));
+            fileAsliName = draft.fileAsliName; namaSheetAsli = draft.namaSheetAsli; headerRowIndex = draft.headerRowIndex; mapKolom = draft.mapKolom; originalExcelData = draft.data;
+            bangunTabelDariData(true);
+        }
+
+        function hapusDraft(key) {
+            if(confirm("Yakin ingin membuang draft ini? Seluruh ketikan yang belum diunduh akan dihapus selamanya.")) {
+                localStorage.removeItem(key); muatDaftarDraft();
+                if(key === "OBE_Draft_" + fileAsliName) document.getElementById('badan-tabel-obe').innerHTML = '<tr><td colspan="11" class="py-16 text-center text-gray-400 bg-gray-50/50"><i class="fas fa-file-excel text-5xl mb-4 text-gray-300"></i><br><p class="font-medium text-gray-500">Daftar Mahasiswa Masih Kosong</p></td></tr>';
+            }
+        }
+
+        function tanganiUnggahExcel(event) {
+            var file = event.target.files[0]; if (!file) return;
+            var cekDraft = localStorage.getItem("OBE_Draft_" + file.name);
+            if(cekDraft) { if(confirm("Draft kelas ini ditemukan. Lanjutkan penilaian tersimpan?")) { lanjutkanDraft("OBE_Draft_" + file.name); return; } }
+            
+            fileAsliName = file.name; var reader = new FileReader();
+            reader.onload = function(e) {
+                var workbook = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+                namaSheetAsli = workbook.SheetNames[0]; 
+                var jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[namaSheetAsli], {header: 1, defval: ""});
+                originalExcelData = jsonData; headerRowIndex = -1;
+                for(var i=0; i < Math.min(20, jsonData.length); i++) {
+                    if(jsonData[i].some(h => h && h.toString().toUpperCase().trim() === 'NIM') && jsonData[i].some(h => h && h.toString().toUpperCase().trim() === 'NAMA')) { headerRowIndex = i; break; }
+                }
+                if(headerRowIndex === -1) { alert("File tidak sesuai standar portal SIAKAD Unimed."); return; }
+                var headers = jsonData[headerRowIndex];
+                mapKolom = { nim: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'NIM'), nama: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'NAMA'), f1: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'F1'), f2: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'F2'), f3: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'F3'), f4: headers.findIndex(h => h && h.toString().toUpperCase().trim() === 'F4'), sikap: headers.findIndex(h => h && h.toString().toUpperCase().includes('SIKAP')), akhir: headers.findIndex(h => h && h.toString().toUpperCase().includes('AKHIR')), grade: headers.findIndex(h => h && h.toString().toUpperCase() === 'GRADE'), kategori: headers.findIndex(h => h && h.toString().toUpperCase() === 'KATEGORI') };
+                if(mapKolom.akhir === -1) { mapKolom.akhir = headers.length; headers.push("Nilai Akhir"); }
+                if(mapKolom.grade === -1) { mapKolom.grade = headers.length; headers.push("Grade"); }
+                if(mapKolom.kategori === -1) { mapKolom.kategori = headers.length; headers.push("Kategori"); }
+                bangunTabelDariData(false); simpanKeDraft();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function bangunTabelDariData(isDariDraft) {
+            var thead = document.getElementById('header-tabel-obe');
+            thead.innerHTML = `<tr><th class="py-3 px-4 text-center border-b font-semibold w-12">No</th><th class="py-3 px-4 text-left border-b font-semibold w-32">NIM</th><th class="py-3 px-4 text-left border-b font-semibold">Nama Mahasiswa</th>${mapKolom.f1!==-1 ? '<th class="py-3 px-4 text-center border-b font-semibold text-blue-800">F1 <span class="text-[10px] block">(5%)</span></th>' : ''}${mapKolom.f2!==-1 ? '<th class="py-3 px-4 text-center border-b font-semibold text-blue-800">F2 <span class="text-[10px] block">(20%)</span></th>' : ''}${mapKolom.f3!==-1 ? '<th class="py-3 px-4 text-center border-b font-semibold text-blue-800">F3 <span class="text-[10px] block">(25%)</span></th>' : ''}${mapKolom.f4!==-1 ? '<th class="py-3 px-4 text-center border-b font-semibold text-blue-800">F4 <span class="text-[10px] block">(50%)</span></th>' : ''}${mapKolom.sikap!==-1 ? '<th class="py-3 px-4 text-center border-b font-semibold text-blue-800">Sikap</th>' : ''}<th class="py-3 px-4 text-center border-b font-bold text-emerald-800 bg-emerald-50">NM Akhir</th><th class="py-3 px-4 text-center border-b font-bold text-emerald-800 bg-emerald-50">Grade</th><th class="py-3 px-4 text-center border-b font-bold text-emerald-800 bg-emerald-50">Kategori</th></tr>`;
+            var tbody = document.getElementById('badan-tabel-obe'); tbody.innerHTML = ''; var countMhs = 0;
+            for(var r = headerRowIndex + 1; r < originalExcelData.length; r++) {
+                var rowData = originalExcelData[r]; var nim = rowData[mapKolom.nim] || ''; var nama = rowData[mapKolom.nama] || '';
+                if(nim === '' && nama === '') continue;  countMhs++;
+                while(originalExcelData[r].length <= Math.max(mapKolom.akhir, mapKolom.grade, mapKolom.kategori)) { originalExcelData[r].push(""); }
+                var tr = document.createElement('tr'); tr.className = "hover:bg-blue-50 transition-colors border-b";
+                var barisHTML = `<td class="py-3 px-4 text-center font-medium text-gray-500">${countMhs}</td><td class="py-3 px-4 text-gray-700 font-mono text-sm tracking-wider">${nim}</td><td class="py-3 px-4 font-semibold text-gray-800 text-xs uppercase">${nama}</td>`;
+                if(mapKolom.f1!==-1) barisHTML += buatSel(r, mapKolom.f1, rowData[mapKolom.f1]); if(mapKolom.f2!==-1) barisHTML += buatSel(r, mapKolom.f2, rowData[mapKolom.f2]); if(mapKolom.f3!==-1) barisHTML += buatSel(r, mapKolom.f3, rowData[mapKolom.f3]); if(mapKolom.f4!==-1) barisHTML += buatSel(r, mapKolom.f4, rowData[mapKolom.f4]); if(mapKolom.sikap!==-1) barisHTML += buatSel(r, mapKolom.sikap, rowData[mapKolom.sikap]);
+                barisHTML += `<td class="py-3 px-4 text-center cell-kalkulasi border-l" id="akhir-${r}">0</td><td class="py-3 px-4 text-center cell-kalkulasi font-bold text-lg" id="grade-${r}">-</td><td class="py-3 px-4 text-center cell-kalkulasi font-bold text-sm" id="kat-${r}">-</td>`;
+                tr.innerHTML = barisHTML; tbody.appendChild(tr); kalkulasiBaris(r, true);
+            }
+            document.getElementById('info-status-file').innerHTML = isDariDraft ? `<i class="fas fa-cloud-download-alt text-emerald-600 mr-2"></i> <span class="text-emerald-800">Melanjutkan kelas <b>${fileAsliName}</b></span>` : `<i class="fas fa-check-circle text-green-600 mr-2"></i> <span class="text-green-800">Memuat <b>${countMhs} Mahasiswa</b> dari <b>${fileAsliName}</b></span>`;
+        }
+
+        function buatSel(bIdx, cIdx, n) {
+            var v = (n !== undefined && n !== null) ? n : '';
+            return `<td class="py-3 px-2 text-center editable-cell font-mono text-base font-bold text-blue-700 bg-blue-50/40 focus:bg-blue-100 focus:shadow-inner outline-none transition-colors border-l border-gray-100 cursor-text" contenteditable="true" data-row="${bIdx}" data-col="${cIdx}" oninput="kalkulasiBaris(${bIdx}, false)">${v}</td>`;
+        }
+
+        function kalkulasiBaris(r, isLoding = false) {
+            var getAngka = (colIdx) => { if(colIdx === -1) return 0; var sel = document.querySelector(`td[data-row="${r}"][data-col="${colIdx}"]`); if(!sel) return 0; var val = sel.innerText.trim().replace(',','.'); return isNaN(val) || val === '' ? 0 : parseFloat(val); };
+            var f1 = getAngka(mapKolom.f1), f2 = getAngka(mapKolom.f2), f3 = getAngka(mapKolom.f3), f4 = getAngka(mapKolom.f4), sikap = getAngka(mapKolom.sikap);
+            var nilaiAkhir = (0.05 * f1) + (0.2 * f2) + (0.25 * f3) + (0.5 * f4);
+            var grade = "E"; if(nilaiAkhir >= 85) grade = "A"; else if(nilaiAkhir >= 75) grade = "B"; else if(nilaiAkhir >= 65) grade = "C";
+            if(sikap <= 2.50 && sikap > 0) grade = "E";
+            var kategori = "-"; if(sikap >= 3.51) kategori = "SB"; else if(sikap >= 2.51) kategori = "B"; else if(sikap >= 1.51) kategori = "KB"; else if(sikap > 0) kategori = "SKB";
+
+            var elAkhir = document.getElementById(`akhir-${r}`), elGrade = document.getElementById(`grade-${r}`), elKat = document.getElementById(`kat-${r}`);
+            if(elAkhir) elAkhir.innerText = nilaiAkhir > 0 ? nilaiAkhir.toFixed(2) : '0';
+            
+            if(elGrade) {
+                elGrade.innerText = grade; elGrade.className = "py-3 px-4 text-center cell-kalkulasi font-bold text-lg";
+                if(grade === "A") elGrade.classList.add("text-green-600"); else if(grade === "B") elGrade.classList.add("text-blue-600"); else if(grade === "C") elGrade.classList.add("text-yellow-500"); else if(grade === "E") elGrade.classList.add("text-red-600");
+            }
+            if(elKat) {
+                elKat.innerText = kategori; elKat.className = "py-3 px-4 text-center cell-kalkulasi font-bold text-sm border-r border-gray-100";
+                if(kategori === "SB") elKat.classList.add("text-emerald-600"); else if(kategori === "B") elKat.classList.add("text-blue-600"); else if(kategori === "KB") elKat.classList.add("text-orange-500"); else if(kategori === "SKB") elKat.classList.add("text-red-600");
+            }
+            
+            originalExcelData[r][mapKolom.f1] = f1; originalExcelData[r][mapKolom.f2] = f2; originalExcelData[r][mapKolom.f3] = f3; originalExcelData[r][mapKolom.f4] = f4; originalExcelData[r][mapKolom.sikap] = sikap; originalExcelData[r][mapKolom.akhir] = nilaiAkhir; originalExcelData[r][mapKolom.grade] = grade; originalExcelData[r][mapKolom.kategori] = kategori;
+            
+            if(!isLoding) {
+                var s = document.activeElement; if(s && s.tagName === 'TD') { s.classList.remove("flash-save"); void s.offsetWidth; s.classList.add("flash-save"); }
+                clearTimeout(window.autoSaveTimer); window.autoSaveTimer = setTimeout(() => { simpanKeDraft(); }, 500);
+            }
+        }
+
+        function unduhExcelOBE() {
+            if(originalExcelData.length === 0) { alert("Belum ada file."); return; }
+            var selNilai = document.querySelectorAll('.editable-cell');
+            selNilai.forEach(sel => { var r = sel.getAttribute('data-row'), c = sel.getAttribute('data-col'), val = sel.innerText.trim().replace(',','.'); if(val !== '' && !isNaN(val)) val = parseFloat(val); originalExcelData[r][c] = val; });
+            var wks = XLSX.utils.aoa_to_sheet(originalExcelData), wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, wks, namaSheetAsli);
+            var fBaru = fileAsliName.replace('.xlsx', '_SUDAH_DINILAI.xlsx'); XLSX.writeFile(wb, fBaru); alert("Berhasil! File " + fBaru + " siap di-submit.");
+        }
+
+        // -----------------------------------------------------------------------
+        // C. MESIN PEMBACA DATABASE GALERI KARYA (LIVE DATA)
+        // -----------------------------------------------------------------------
+        var dataDatabaseKarya = []; var statusDomainSaatIni = 'SEMUA'; var kategoriFilterSaatIni = 'Semua';
+        
+        function muatDataDatabase() {
+            fetch("https://docs.google.com/spreadsheets/d/1ZoOQdU766hgwtHFZ7jUadaMDCoFmysdG7XWTOLmMcHo/gviz/tq?tqx=out:json")
+            .then(res => res.text())
+            .then(text => {
+                var jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                var data = JSON.parse(jsonStr);
+                var rows = data.table.rows;
+                var hasil = [];
+
+                for (var i = 1; i < rows.length; i++) {
+                    if (!rows[i] || !rows[i].c) continue;
+                    var row = rows[i].c;
+                    var nama = (row[1] && row[1].v) ? row[1].v.toString().trim() : 'Tanpa Nama';
+                    var matkulAsli = (row[3] && row[3].v) ? row[3].v.toString().trim() : 'Umum';
+                    var kategori = (row[4] && row[4].v) ? row[4].v.toString().trim() : 'Karya';
+                    var judul = (row[5] && row[5].v) ? row[5].v.toString() : 'Tanpa Judul';
+                    var linkKarya = (row[6] && row[6].v) ? row[6].v.toString() : '';
+                    var linkGambar = (row[7] && row[7].v) ? row[7].v.toString() : '';
+                    
+                    var statusPub = '';
+                    for(var x = row.length - 1; x >= Math.max(0, row.length - 5); x--) {
+                        if (row[x] && row[x].v && row[x].v.toString().toUpperCase().includes('LAYAK TAYANG')) { statusPub = 'LAYAK TAYANG'; break; }
+                    }
+
+                    if (statusPub === 'LAYAK TAYANG' && linkKarya !== '') {
+                        hasil.push({ nama: nama, matkulAsli: matkulAsli, matkulFilter: matkulAsli.toUpperCase(), kategori: kategori, judul: judul.replace(/"/g, '&quot;'), linkKarya: linkKarya, linkGambar: linkGambar });
+                    }
+                }
+                
+                dataDatabaseKarya = hasil;
+                var ld=document.getElementById('wadah-sorotan-loading'); if(ld) ld.classList.add('hidden');
+                document.getElementById('stat-karya').innerText = hasil.length;
+                var p=[], m=[]; hasil.forEach(x=>{if(!p.includes(x.nama)) p.push(x.nama); if(!m.includes(x.matkulFilter) && x.matkulFilter!=='UMUM') m.push(x.matkulFilter);});
+                document.getElementById('stat-mahasiswa').innerText = p.length; document.getElementById('stat-matkul').innerText = m.length;
+                var w=document.getElementById('wadah-karya-sorotan'); if(!w) return; w.innerHTML='';
+                
+                if(hasil.length === 0) { w.innerHTML = '<div class="col-span-full text-center text-gray-500">Belum ada karya dengan status LAYAK TAYANG.</div>'; }
+                else { hasil.slice().reverse().slice(0,3).forEach((item,i) => w.innerHTML+=buatHTMLKartu(item,i)); }
+            })
+            .catch(err => {
+                var ld=document.getElementById('wadah-sorotan-loading'); 
+                if(ld) ld.innerHTML = '<p class="text-red-500 text-sm font-bold">Gagal memuat galeri. Pastikan koneksi internet stabil.</p>';
+            });
+        }
+        
+        function bukaDomain(matkul, judul) { statusDomainSaatIni = matkul.toUpperCase(); bukaHalaman('domain'); document.getElementById('teks-judul-domain').innerText = judul; document.getElementById('inputPencarian').value=''; terapkanFilter('Semua'); }
+        
+        function terapkanFilter(kat) {
+            kategoriFilterSaatIni = kat;
+            ['btn-Semua','btn-Buku Saku','btn-Artikel Ilmiah','btn-Video'].forEach(id => {var b=document.getElementById(id); if(b) b.className="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm cursor-pointer";});
+            var ba=document.getElementById('btn-'+kat); if(ba) ba.className="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md cursor-pointer";
             jalankanPencarian();
         }
-
+        
         function jalankanPencarian() {
-            var wadah = document.getElementById('wadah-karya-domain');
-            wadah.innerHTML = '';
-            var kataKunci = document.getElementById('inputPencarian').value.toLowerCase();
-            var adaHasil = false;
-
-            for(var i=0; i<dataDatabaseKarya.length; i++) {
-                var item = dataDatabaseKarya[i];
-                var lolosMatkul = false;
-                
-                // Filter Museum
-                if (statusDomainSaatIni === 'MUSEUM') {
-                    if (item.kategori.toLowerCase().indexOf('video') !== -1 || item.kategori.toLowerCase().indexOf('animasi') !== -1 || item.kategori.toLowerCase().indexOf('cerita') !== -1) {
-                        lolosMatkul = true;
-                    }
-                } else if (statusDomainSaatIni === 'SEMUA') {
-                    lolosMatkul = true;
-                } else {
-                    if (item.matkulFilter.indexOf(statusDomainSaatIni) !== -1) lolosMatkul = true;
-                }
-
-                if(!lolosMatkul) continue;
-
-                var lolosKategori = false;
-                if (kategoriFilterSaatIni === 'Semua') lolosKategori = true;
-                else if (kategoriFilterSaatIni === 'Buku Saku' && item.kategori.toLowerCase().indexOf('buku saku') !== -1) lolosKategori = true;
-                else if (kategoriFilterSaatIni === 'Artikel Ilmiah' && item.kategori.toLowerCase().indexOf('artikel') !== -1) lolosKategori = true;
-                else if (kategoriFilterSaatIni === 'Video' && item.kategori.toLowerCase().indexOf('video') !== -1) lolosKategori = true;
-
-                if(!lolosKategori) continue;
-
-                var lolosPencarian = false;
-                if(kataKunci === '') {
-                    lolosPencarian = true;
-                } else if(item.judul.toLowerCase().indexOf(kataKunci) !== -1 || item.nama.toLowerCase().indexOf(kataKunci) !== -1) {
-                    lolosPencarian = true;
-                }
-
-                if (lolosPencarian) {
-                    wadah.innerHTML += buatHTMLKartu(item, i);
-                    adaHasil = true;
-                }
-            }
-
-            if (!adaHasil) {
-                 wadah.innerHTML = '<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl border border-gray-100 shadow-sm"><i class="fas fa-search text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold text-gray-700 mb-2">Karya Tidak Ditemukan</h3><p class="text-sm">Belum ada karya untuk kategori ini.</p></div>';
-            }
+            var w = document.getElementById('wadah-karya-domain'); w.innerHTML = '';
+            var k = document.getElementById('inputPencarian').value.toLowerCase(), ada = false;
+            dataDatabaseKarya.forEach((it, i) => {
+                var lm = false; if(statusDomainSaatIni==='MUSEUM'){if(it.kategori.toLowerCase().match(/video|animasi|cerita/)) lm=true;}else if(statusDomainSaatIni==='SEMUA') lm=true;else if(it.matkulFilter.includes(statusDomainSaatIni)) lm=true;
+                if(!lm) return;
+                var lk = false; if(kategoriFilterSaatIni==='Semua') lk=true;else if(kategoriFilterSaatIni==='Buku Saku'&&it.kategori.toLowerCase().includes('buku saku')) lk=true;else if(kategoriFilterSaatIni==='Artikel Ilmiah'&&it.kategori.toLowerCase().includes('artikel')) lk=true;else if(kategoriFilterSaatIni==='Video'&&it.kategori.toLowerCase().includes('video')) lk=true;
+                if(!lk) return;
+                if(k===''||it.judul.toLowerCase().includes(k)||it.nama.toLowerCase().includes(k)) { w.innerHTML+=buatHTMLKartu(it,i); ada=true; }
+            });
+            if(!ada) w.innerHTML='<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl shadow-sm"><i class="fas fa-search text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold">Karya Tidak Ditemukan</h3></div>';
         }
-
-        function renderKaryaSorotan() {
-            var wadah = document.getElementById('wadah-karya-sorotan');
-            if(!wadah) return;
-            wadah.innerHTML = '';
-            var dataTerbaru = dataDatabaseKarya.slice().reverse().slice(0, 3);
-            if (dataTerbaru.length === 0) {
-                wadah.innerHTML = '<div class="col-span-full text-center text-gray-500 text-sm">Belum ada karya mahasiswa yang disorot saat ini. Pastikan Anda telah mengetik "LAYAK TAYANG" di file Google Sheets.</div>';
-                return;
-            }
-            for(var j=0; j<dataTerbaru.length; j++) {
-                wadah.innerHTML += buatHTMLKartu(dataTerbaru[j], j);
-            }
-        }
-
-        function buatHTMLKartu(item, indexBaris) {
-            var badgeHTML = '<span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 shadow-sm z-10">' + item.kategori + '</span>';
-            var linkKaryaAman = item.linkKarya;
-            if (linkKaryaAman && linkKaryaAman.indexOf('drive.google.com') !== -1) {
-                var matchLinkID = linkKaryaAman.match(/id=([a-zA-Z0-9_-]+)/) || linkKaryaAman.match(/d\/([a-zA-Z0-9_-]+)/);
-                if (matchLinkID && matchLinkID[1]) linkKaryaAman = 'https://drive.google.com/file/d/' + matchLinkID[1] + '/preview';
-            }
-
-            var coverContent = '<h3 class="text-white text-xl font-medium px-6">' + item.judul + '</h3>';
-            if (item.linkGambar && item.linkGambar.indexOf('drive.google.com') !== -1) {
-                var matchID = item.linkGambar.match(/id=([a-zA-Z0-9_-]+)/) || item.linkGambar.match(/d\/([a-zA-Z0-9_-]+)/);
-                if (matchID && matchID[1]) {
-                    coverContent = `<img src="https://drive.google.com/thumbnail?id=${matchID[1]}&sz=w800" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">`;
-                }
-            }
-
-            return `
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all flex flex-col group hover:-translate-y-1">
-                    <div class="bg-gray-800 h-52 relative flex items-center justify-center text-center overflow-hidden">
-                        ${badgeHTML} ${coverContent}
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col bg-white">
-                        <div class="text-[10px] font-bold text-[#0284c7] mb-2 tracking-widest">${item.matkulAsli.toUpperCase()}</div>
-                        <h4 class="text-base font-bold text-gray-900 mb-3 line-clamp-2">${item.judul}</h4>
-                        <div class="flex items-center text-sm text-gray-500 mb-6 flex-grow"><i class="fas fa-user-edit mr-2"></i><span>${item.nama}</span></div>
-                        <a href="${linkKaryaAman}" target="_blank" class="block w-full text-center bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[#0284c7] hover:text-white font-medium py-3 px-4 rounded-xl transition-colors text-sm">Lihat Karya</a>
-                    </div>
-                </div>
-            `;
+        
+        function buatHTMLKartu(it,i){
+            var b=`<span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 z-10 shadow-sm">${it.kategori}</span>`, l=it.linkKarya;
+            if(l&&l.includes('drive.google.com')){var m=l.match(/id=([a-zA-Z0-9_-]+)/)||l.match(/d\/([a-zA-Z0-9_-]+)/); if(m&&m[1]) l='https://drive.google.com/file/d/'+m[1]+'/preview';}
+            var c=`<h3 class="text-white text-xl font-medium px-6">${it.judul}</h3>`;
+            if(it.linkGambar&&it.linkGambar.includes('drive.google.com')){var mg=it.linkGambar.match(/id=([a-zA-Z0-9_-]+)/)||it.linkGambar.match(/d\/([a-zA-Z0-9_-]+)/); if(mg&&mg[1]) c=`<img src="https://drive.google.com/thumbnail?id=${mg[1]}&sz=w800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">`;}
+            return `<div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl flex flex-col group hover:-translate-y-1"><div class="bg-gray-800 h-52 relative flex items-center justify-center text-center overflow-hidden">${b} ${c}</div><div class="p-6 flex-grow flex flex-col bg-white"><div class="text-[10px] font-bold text-[#0284c7] mb-2 tracking-widest">${it.matkulAsli.toUpperCase()}</div><h4 class="text-base font-bold text-gray-900 mb-3 line-clamp-2">${it.judul}</h4><div class="flex items-center text-sm text-gray-500 mb-6 flex-grow"><i class="fas fa-user-edit mr-2"></i><span>${it.nama}</span></div><a href="${l}" target="_blank" class="block w-full text-center bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[#0284c7] hover:text-white font-medium py-3 rounded-xl transition-colors text-sm">Lihat Karya</a></div></div>`;
         }
     </script>
 </body>
