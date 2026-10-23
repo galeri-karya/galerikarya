@@ -190,10 +190,10 @@
                 <input type="text" id="inputPencarian" onkeyup="jalankanPencarian()" placeholder="Cari judul karya atau nama mahasiswa..." class="w-full pl-12 pr-4 py-4 rounded-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none shadow-sm">
             </div>
             <div class="flex flex-wrap justify-center gap-3 mb-12" id="wadah-tombol-filter">
-                <button onclick="terapkanFilter('Semua')" id="btn-Semua" class="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md">Semua Output</button>
-                <button onclick="terapkanFilter('Buku Saku')" id="btn-Buku Saku" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Buku Saku</button>
-                <button onclick="terapkanFilter('Artikel Ilmiah')" id="btn-Artikel Ilmiah" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Artikel Ilmiah</button>
-                <button onclick="terapkanFilter('Video')" id="btn-Video" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold">Video Animasi</button>
+                <button onclick="terapkanFilter('Semua')" id="btn-Semua" class="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md cursor-pointer">Semua Output</button>
+                <button onclick="terapkanFilter('Buku Saku')" id="btn-Buku Saku" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold cursor-pointer">Buku Saku</button>
+                <button onclick="terapkanFilter('Artikel Ilmiah')" id="btn-Artikel Ilmiah" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold cursor-pointer">Artikel Ilmiah</button>
+                <button onclick="terapkanFilter('Video')" id="btn-Video" class="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold cursor-pointer">Video Animasi</button>
             </div>
             <div id="wadah-karya-domain" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left"></div>
         </div>
@@ -513,7 +513,7 @@
             var fBaru = fileAsliName.replace('.xlsx', '_SUDAH_DINILAI.xlsx'); XLSX.writeFile(wb, fBaru); alert("Berhasil! File " + fBaru + " siap di-submit.");
         }
 
-        // 3. PEMBACA GOOGLE SHEET ULTRA-FLEKSIBEL (ANTI UNLIMITED LOADING)
+        // 3. PEMBACA GOOGLE SHEET ULTRA-FLEKSIBEL (PENCARIAN SMART KEYWORD)
         var dataDatabaseKarya = []; var statusDomainSaatIni = 'SEMUA'; var kategoriFilterSaatIni = 'Semua';
         
         function muatDataDatabase() {
@@ -542,13 +542,11 @@
                         return '';
                     };
 
-                    // Ambil isi sel secara berurutan
                     var isiRow = [];
                     for(var c=0; c<row.length; c++) {
                         isiRow.push(getStr(row[c]));
                     }
 
-                    // Cari link Drive/HTTP di dalam baris
                     var linkKarya = '';
                     var linkGambar = '';
                     for(var k=0; k<isiRow.length; k++) {
@@ -558,16 +556,13 @@
                         }
                     }
 
-                    // Jika baris berisi minimal 2 kolom teks dan bukan header
                     var nama = isiRow[1] || isiRow[2] || 'Mahasiswa';
-                    var matkulAsli = isiRow[3] || isiRow[4] || 'Umum';
+                    var matkulAsli = isiRow[3] || isiRow[4] || isiRow[2] || 'Umum';
                     var kategori = isiRow[4] || isiRow[5] || 'Karya';
                     var judul = isiRow[5] || isiRow[6] || 'Tanpa Judul';
 
-                    // Abaikan baris header form jika ada
                     if(nama.toLowerCase().includes('nama') && judul.toLowerCase().includes('judul')) continue;
 
-                    // Tampilkan karya jika memiliki judul/link
                     if(judul !== '' || linkKarya !== '') {
                         hasil.push({ 
                             nama: nama, 
@@ -576,7 +571,8 @@
                             kategori: kategori, 
                             judul: judul.replace(/"/g, '&quot;'), 
                             linkKarya: linkKarya, 
-                            linkGambar: linkGambar 
+                            linkGambar: linkGambar,
+                            fullRowText: isiRow.join(' ').toLowerCase()
                         });
                     }
                 }
@@ -599,7 +595,7 @@
                 w.innerHTML = '';
                 
                 if(hasil.length === 0) { 
-                    w.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm border border-dashed border-gray-300"><i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i><p class="font-bold">Belum ada tanggapan masuk di Google Sheet.</p><a href="https://docs.google.com/spreadsheets/d/1ZoOQdU766hgwtHFZ7jUadaMDCoFmysdG7XWTOLmMcHo/edit?usp=sharing" target="_blank" class="inline-block mt-3 text-xs text-blue-600 hover:underline"><i class="fas fa-external-link-alt mr-1"></i> Buka Google Sheet Brankas</a></div>'; 
+                    w.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm border border-dashed border-gray-300"><i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i><p class="font-bold">Belum ada tanggapan masuk di Google Sheet.</p></div>'; 
                 } else { 
                     hasil.slice().reverse().slice(0,3).forEach((item,i) => w.innerHTML += buatHTMLKartu(item,i)); 
                 }
@@ -607,37 +603,85 @@
             .catch(err => {
                 console.error("Error DB:", err);
                 var ld = document.getElementById('wadah-sorotan-loading'); 
-                if(ld) ld.innerHTML = '<p class="text-red-500 text-sm font-bold">Gagal terhubung ke Google Sheet. Mohon periksa kembali koneksi internet.</p>';
+                if(ld) ld.innerHTML = '<p class="text-red-500 text-sm font-bold">Gagal terhubung ke Google Sheet.</p>';
             });
         }
         
-        function bukaDomain(matkul, judul) { statusDomainSaatIni = matkul.toUpperCase(); bukaHalaman('domain'); document.getElementById('teks-judul-domain').innerText = judul; document.getElementById('inputPencarian').value=''; terapkanFilter('Semua'); }
+        function bukaDomain(matkul, judul) { 
+            statusDomainSaatIni = matkul.toUpperCase(); 
+            bukaHalaman('domain'); 
+            document.getElementById('teks-judul-domain').innerText = judul; 
+            document.getElementById('inputPencarian').value = ''; 
+            terapkanFilter('Semua'); 
+        }
         
         function terapkanFilter(kat) {
             kategoriFilterSaatIni = kat;
-            ['btn-Semua','btn-Buku Saku','btn-Artikel Ilmiah','btn-Video'].forEach(id => {var b=document.getElementById(id); if(b) b.className="btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm cursor-pointer";});
-            var ba=document.getElementById('btn-'+kat); if(ba) ba.className="btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md cursor-pointer";
+            ['btn-Semua','btn-Buku Saku','btn-Artikel Ilmiah','btn-Video'].forEach(id => {
+                var b = document.getElementById(id); 
+                if(b) b.className = "btn-kategori px-6 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-semibold shadow-sm cursor-pointer";
+            });
+            var ba = document.getElementById('btn-'+kat); 
+            if(ba) ba.className = "btn-kategori px-6 py-2.5 rounded-full bg-[#0284c7] text-white text-sm font-semibold shadow-md cursor-pointer";
             jalankanPencarian();
         }
         
         function jalankanPencarian() {
-            var w = document.getElementById('wadah-karya-domain'); w.innerHTML = '';
-            var k = document.getElementById('inputPencarian').value.toLowerCase(), ada = false;
+            var w = document.getElementById('wadah-karya-domain'); 
+            w.innerHTML = '';
+            var k = document.getElementById('inputPencarian').value.toLowerCase();
+            var ada = false;
+            
             dataDatabaseKarya.forEach((it, i) => {
-                var lm = false; if(statusDomainSaatIni==='MUSEUM'){if(it.kategori.toLowerCase().match(/video|animasi|cerita/)) lm=true;}else if(statusDomainSaatIni==='SEMUA') lm=true;else if(it.matkulFilter.includes(statusDomainSaatIni)) lm=true;
+                var lm = false; 
+                if(statusDomainSaatIni === 'MUSEUM') {
+                    if(it.kategori.toLowerCase().match(/video|animasi|cerita|nusantara|lisan/) || it.fullRowText.match(/video|animasi|cerita/)) lm = true;
+                } else if(statusDomainSaatIni === 'SEMUA') {
+                    lm = true;
+                } else {
+                    var domainTarget = statusDomainSaatIni.toLowerCase();
+                    var kataKunci = domainTarget.split(' ');
+                    
+                    // Pencocokan fleksibel jika terdapat kata kunci utama (seperti: "kajian", "psikologi", "bandingan", "cyber", "indonesia", "kritik")
+                    var cocokKataKunci = kataKunci.some(kata => kata.length > 3 && (it.matkulFilter.toLowerCase().includes(kata) || it.fullRowText.includes(kata)));
+                    if(cocokKataKunci || it.matkulFilter.includes(statusDomainSaatIni) || domainTarget.includes(it.matkulFilter.toLowerCase())) {
+                        lm = true;
+                    }
+                }
+                
                 if(!lm) return;
-                var lk = false; if(kategoriFilterSaatIni==='Semua') lk=true;else if(kategoriFilterSaatIni==='Buku Saku'&&it.kategori.toLowerCase().includes('buku saku')) lk=true;else if(kategoriFilterSaatIni==='Artikel Ilmiah'&&it.kategori.toLowerCase().includes('artikel')) lk=true;else if(kategoriFilterSaatIni==='Video'&&it.kategori.toLowerCase().includes('video')) lk=true;
+                
+                var lk = false; 
+                if(kategoriFilterSaatIni === 'Semua') lk = true;
+                else if(kategoriFilterSaatIni === 'Buku Saku' && (it.kategori.toLowerCase().includes('buku') || it.fullRowText.includes('buku'))) lk = true;
+                else if(kategoriFilterSaatIni === 'Artikel Ilmiah' && (it.kategori.toLowerCase().includes('artikel') || it.fullRowText.includes('artikel'))) lk = true;
+                else if(kategoriFilterSaatIni === 'Video' && (it.kategori.toLowerCase().includes('video') || it.fullRowText.includes('video'))) lk = true;
+                
                 if(!lk) return;
-                if(k===''||it.judul.toLowerCase().includes(k)||it.nama.toLowerCase().includes(k)) { w.innerHTML+=buatHTMLKartu(it,i); ada=true; }
+                
+                if(k === '' || it.judul.toLowerCase().includes(k) || it.nama.toLowerCase().includes(k)) { 
+                    w.innerHTML += buatHTMLKartu(it,i); 
+                    ada = true; 
+                }
             });
-            if(!ada) w.innerHTML='<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl shadow-sm"><i class="fas fa-search text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold">Karya Tidak Ditemukan</h3></div>';
+            
+            if(!ada) {
+                w.innerHTML = '<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl shadow-sm border border-gray-100"><i class="fas fa-folder-open text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold text-gray-700">Belum Ada Karya Terpublikasi</h3><p class="text-xs text-gray-400 mt-2">Belum ada dokumen yang dikategorikan untuk mata kuliah ini di Google Sheet.</p></div>';
+            }
         }
         
         function buatHTMLKartu(it,i){
-            var b=`<span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 z-10 shadow-sm">${it.kategori}</span>`, l=it.linkKarya;
-            if(l&&l.includes('drive.google.com')){var m=l.match(/id=([a-zA-Z0-9_-]+)/)||l.match(/d\/([a-zA-Z0-9_-]+)/); if(m&&m[1]) l='https://drive.google.com/file/d/'+m[1]+'/preview';}
-            var c=`<h3 class="text-white text-xl font-medium px-6">${it.judul}</h3>`;
-            if(it.linkGambar&&it.linkGambar.includes('drive.google.com')){var mg=it.linkGambar.match(/id=([a-zA-Z0-9_-]+)/)||it.linkGambar.match(/d\/([a-zA-Z0-9_-]+)/); if(mg&&mg[1]) c=`<img src="https://drive.google.com/thumbnail?id=${mg[1]}&sz=w800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">`;}
+            var b = `<span class="bg-[#f59e0b] text-white text-[10px] font-bold px-3 py-1 rounded-full absolute top-4 left-4 z-10 shadow-sm">${it.kategori}</span>`;
+            var l = it.linkKarya;
+            if(l && l.includes('drive.google.com')){
+                var m = l.match(/id=([a-zA-Z0-9_-]+)/) || l.match(/d\/([a-zA-Z0-9_-]+)/); 
+                if(m && m[1]) l = 'https://drive.google.com/file/d/'+m[1]+'/preview';
+            }
+            var c = `<h3 class="text-white text-xl font-medium px-6">${it.judul}</h3>`;
+            if(it.linkGambar && it.linkGambar.includes('drive.google.com')){
+                var mg = it.linkGambar.match(/id=([a-zA-Z0-9_-]+)/) || it.linkGambar.match(/d\/([a-zA-Z0-9_-]+)/); 
+                if(mg && mg[1]) c = `<img src="https://drive.google.com/thumbnail?id=${mg[1]}&sz=w800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">`;
+            }
             return `<div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl flex flex-col group hover:-translate-y-1"><div class="bg-gray-800 h-52 relative flex items-center justify-center text-center overflow-hidden">${b} ${c}</div><div class="p-6 flex-grow flex flex-col bg-white"><div class="text-[10px] font-bold text-[#0284c7] mb-2 tracking-widest">${it.matkulAsli.toUpperCase()}</div><h4 class="text-base font-bold text-gray-900 mb-3 line-clamp-2">${it.judul}</h4><div class="flex items-center text-sm text-gray-500 mb-6 flex-grow"><i class="fas fa-user-edit mr-2"></i><span>${it.nama}</span></div><a href="${l || '#'}" target="_blank" class="block w-full text-center bg-gray-50 border border-gray-200 text-gray-700 hover:bg-[#0284c7] hover:text-white font-medium py-3 rounded-xl transition-colors text-sm">Lihat Karya</a></div></div>`;
         }
     </script>
