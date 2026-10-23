@@ -131,9 +131,9 @@
                         <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="javascript:void(0)" onclick="bukaDomain('Apresiasi dan Kritik Sastra', 'Apresiasi & Kritik Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                    <a href="javascript:void(0)" onclick="bukaDomain('Apresiasi dan Kritik Sastra', 'Apresiasi dan Kritik Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
                         <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-pen-nib"></i></div>
-                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Apresiasi & Kritik Sastra</h3>
+                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Apresiasi dan Kritik Sastra</h3>
                         <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Melatih ketajaman analisis dan evaluasi karya sastra dengan menggunakan berbagai pendekatan dan teori kritis.</p>
                         <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
@@ -145,10 +145,10 @@
                         <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
-                    <a href="javascript:void(0)" onclick="bukaDomain('Sastra Indonesia', 'Sastra Indonesia')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
-                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-book-open"></i></div>
-                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">Sastra Indonesia</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Mendalami identitas, sejarah, dan struktur karya sastra yang lahir dan berkembang di wilayah Nusantara.</p>
+                    <a href="javascript:void(0)" onclick="bukaDomain('AI dalam Bahasa dan Sastra', 'AI dalam Bahasa dan Sastra')" class="block p-6 border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:bg-blue-50/40 hover:-translate-y-1.5 group flex flex-col h-full cursor-pointer">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center mb-4 text-lg"><i class="fas fa-[#robot]"></i><i class="fas fa-robot"></i></div>
+                        <h3 class="font-bold text-[#1e3a5f] text-lg mb-3 group-hover:text-[#38bdf8] transition-colors duration-300">AI dalam Bahasa dan Sastra</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed mb-4 flex-grow">Pemanfaatan dan analisis integrasi teknologi Kecerdasan Buatan dalam kajian komputasi bahasa dan pengolahan karya sastra.</p>
                         <div class="mt-auto text-xs font-bold text-[#38bdf8] flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-2">Lihat Repositori <i class="fas fa-arrow-right ml-1"></i></div>
                     </a>
 
@@ -287,7 +287,7 @@
                 <ul class="space-y-2 text-gray-400">
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Psikologi Sastra</li>
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Sastra Bandingan</li>
-                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Apresiasi & Kritik Sastra</li>
+                    <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Apresiasi dan Kritik Sastra</li>
                     <li><i class="fas fa-chevron-right text-blue-500 text-[10px] mr-2"></i> Kajian Ilmu Sastra</li>
                 </ul>
             </div>
@@ -513,7 +513,7 @@
             var fBaru = fileAsliName.replace('.xlsx', '_SUDAH_DINILAI.xlsx'); XLSX.writeFile(wb, fBaru); alert("Berhasil! File " + fBaru + " siap di-submit.");
         }
 
-        // 3. PEMBACA GOOGLE SHEET ULTRA-FLEKSIBEL (PENCARIAN SMART KEYWORD)
+        // 3. PEMBACA GOOGLE SHEET & FILTER PRESISI MATA KULIAH
         var dataDatabaseKarya = []; var statusDomainSaatIni = 'SEMUA'; var kategoriFilterSaatIni = 'Semua';
         
         function muatDataDatabase() {
@@ -528,38 +528,47 @@
                 
                 var jsonStr = text.substring(jsonStart, jsonEnd + 1);
                 var data = JSON.parse(jsonStr);
+                var cols = data.table.cols || [];
                 var rows = data.table.rows || [];
-                var hasil = [];
+                
+                // Cari lokasi kolom secara presisi berdasarkan header
+                var idxNama = 2, idxMatkul = 4, idxKategori = 5, idxJudul = 6, idxLinkKarya = 7, idxLinkGambar = 8;
+                for(var c = 0; c < cols.length; c++) {
+                    if(cols[c] && cols[c].label) {
+                        var lbl = cols[c].label.toLowerCase();
+                        if(lbl.includes('nama')) idxNama = c;
+                        else if(lbl.includes('mata kuliah') || lbl.includes('matkul')) idxMatkul = c;
+                        else if(lbl.includes('kategori') || lbl.includes('output')) idxKategori = c;
+                        else if(lbl.includes('judul')) idxJudul = c;
+                        else if(lbl.includes('file') || lbl.includes('link') || lbl.includes('karya')) idxLinkKarya = c;
+                        else if(lbl.includes('gambar') || lbl.includes('cover')) idxLinkGambar = c;
+                    }
+                }
 
+                var hasil = [];
                 for (var i = 0; i < rows.length; i++) {
                     if (!rows[i] || !rows[i].c) continue;
                     var row = rows[i].c;
                     
-                    var getStr = function(cell) {
-                        if (!cell) return '';
-                        if (cell.v !== null && cell.v !== undefined) return cell.v.toString().trim();
-                        if (cell.f) return cell.f.toString().trim();
-                        return '';
-                    };
+                    var getVal = (idx) => (row[idx] && row[idx].v !== null && row[idx].v !== undefined) ? row[idx].v.toString().trim() : '';
+                    
+                    var nama = getVal(idxNama) || getVal(2) || 'Mahasiswa';
+                    var matkulAsli = getVal(idxMatkul) || getVal(4) || 'Umum';
+                    var kategori = getVal(idxKategori) || getVal(5) || 'Karya';
+                    var judul = getVal(idxJudul) || getVal(6) || 'Tanpa Judul';
+                    var linkKarya = getVal(idxLinkKarya) || getVal(7);
+                    var linkGambar = getVal(idxLinkGambar) || getVal(8);
 
-                    var isiRow = [];
-                    for(var c=0; c<row.length; c++) {
-                        isiRow.push(getStr(row[c]));
-                    }
-
-                    var linkKarya = '';
-                    var linkGambar = '';
-                    for(var k=0; k<isiRow.length; k++) {
-                        if(isiRow[k].startsWith('http://') || isiRow[k].startsWith('https://')) {
-                            if(!linkKarya) linkKarya = isiRow[k];
-                            else if(!linkGambar) linkGambar = isiRow[k];
+                    // Cari link jika belum didapat
+                    if(!linkKarya) {
+                        for(var x=0; x<row.length; x++) {
+                            var vStr = getVal(x);
+                            if(vStr.startsWith('http://') || vStr.startsWith('https://')) {
+                                linkKarya = vStr;
+                                break;
+                            }
                         }
                     }
-
-                    var nama = isiRow[1] || isiRow[2] || 'Mahasiswa';
-                    var matkulAsli = isiRow[3] || isiRow[4] || isiRow[2] || 'Umum';
-                    var kategori = isiRow[4] || isiRow[5] || 'Karya';
-                    var judul = isiRow[5] || isiRow[6] || 'Tanpa Judul';
 
                     if(nama.toLowerCase().includes('nama') && judul.toLowerCase().includes('judul')) continue;
 
@@ -567,12 +576,11 @@
                         hasil.push({ 
                             nama: nama, 
                             matkulAsli: matkulAsli, 
-                            matkulFilter: matkulAsli.toUpperCase(), 
+                            matkulClean: matkulAsli.trim().toLowerCase(), 
                             kategori: kategori, 
                             judul: judul.replace(/"/g, '&quot;'), 
                             linkKarya: linkKarya, 
-                            linkGambar: linkGambar,
-                            fullRowText: isiRow.join(' ').toLowerCase()
+                            linkGambar: linkGambar 
                         });
                     }
                 }
@@ -585,7 +593,7 @@
                 var p = [], m = []; 
                 hasil.forEach(x => {
                     if(x.nama && !p.includes(x.nama)) p.push(x.nama); 
-                    if(x.matkulFilter && !m.includes(x.matkulFilter) && x.matkulFilter !== 'UMUM') m.push(x.matkulFilter);
+                    if(x.matkulAsli && !m.includes(x.matkulAsli) && x.matkulAsli.toUpperCase() !== 'UMUM') m.push(x.matkulAsli);
                 });
                 document.getElementById('stat-mahasiswa').innerText = p.length; 
                 document.getElementById('stat-matkul').innerText = m.length;
@@ -595,7 +603,7 @@
                 w.innerHTML = '';
                 
                 if(hasil.length === 0) { 
-                    w.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm border border-dashed border-gray-300"><i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i><p class="font-bold">Belum ada tanggapan masuk di Google Sheet.</p></div>'; 
+                    w.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8 bg-white rounded-xl shadow-sm border border-dashed border-gray-300"><i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i><p class="font-bold">Belum ada karya masuk di Google Sheet.</p></div>'; 
                 } else { 
                     hasil.slice().reverse().slice(0,3).forEach((item,i) => w.innerHTML += buatHTMLKartu(item,i)); 
                 }
@@ -608,7 +616,7 @@
         }
         
         function bukaDomain(matkul, judul) { 
-            statusDomainSaatIni = matkul.toUpperCase(); 
+            statusDomainSaatIni = matkul; 
             bukaHalaman('domain'); 
             document.getElementById('teks-judul-domain').innerText = judul; 
             document.getElementById('inputPencarian').value = ''; 
@@ -635,16 +643,12 @@
             dataDatabaseKarya.forEach((it, i) => {
                 var lm = false; 
                 if(statusDomainSaatIni === 'MUSEUM') {
-                    if(it.kategori.toLowerCase().match(/video|animasi|cerita|nusantara|lisan/) || it.fullRowText.match(/video|animasi|cerita/)) lm = true;
+                    if(it.kategori.toLowerCase().match(/video|animasi|cerita/)) lm = true;
                 } else if(statusDomainSaatIni === 'SEMUA') {
                     lm = true;
                 } else {
-                    var domainTarget = statusDomainSaatIni.toLowerCase();
-                    var kataKunci = domainTarget.split(' ');
-                    
-                    // Pencocokan fleksibel jika terdapat kata kunci utama (seperti: "kajian", "psikologi", "bandingan", "cyber", "indonesia", "kritik")
-                    var cocokKataKunci = kataKunci.some(kata => kata.length > 3 && (it.matkulFilter.toLowerCase().includes(kata) || it.fullRowText.includes(kata)));
-                    if(cocokKataKunci || it.matkulFilter.includes(statusDomainSaatIni) || domainTarget.includes(it.matkulFilter.toLowerCase())) {
+                    // FILTER PERSIS/STRICT: Memastikan hanya mata kuliah yang sesuai yang ditampilkan
+                    if(it.matkulClean === statusDomainSaatIni.trim().toLowerCase()) {
                         lm = true;
                     }
                 }
@@ -653,9 +657,9 @@
                 
                 var lk = false; 
                 if(kategoriFilterSaatIni === 'Semua') lk = true;
-                else if(kategoriFilterSaatIni === 'Buku Saku' && (it.kategori.toLowerCase().includes('buku') || it.fullRowText.includes('buku'))) lk = true;
-                else if(kategoriFilterSaatIni === 'Artikel Ilmiah' && (it.kategori.toLowerCase().includes('artikel') || it.fullRowText.includes('artikel'))) lk = true;
-                else if(kategoriFilterSaatIni === 'Video' && (it.kategori.toLowerCase().includes('video') || it.fullRowText.includes('video'))) lk = true;
+                else if(kategoriFilterSaatIni === 'Buku Saku' && it.kategori.toLowerCase().includes('buku saku')) lk = true;
+                else if(kategoriFilterSaatIni === 'Artikel Ilmiah' && it.kategori.toLowerCase().includes('artikel')) lk = true;
+                else if(kategoriFilterSaatIni === 'Video' && it.kategori.toLowerCase().includes('video')) lk = true;
                 
                 if(!lk) return;
                 
@@ -666,7 +670,7 @@
             });
             
             if(!ada) {
-                w.innerHTML = '<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl shadow-sm border border-gray-100"><i class="fas fa-folder-open text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold text-gray-700">Belum Ada Karya Terpublikasi</h3><p class="text-xs text-gray-400 mt-2">Belum ada dokumen yang dikategorikan untuk mata kuliah ini di Google Sheet.</p></div>';
+                w.innerHTML = '<div class="col-span-full text-center p-16 text-gray-500 bg-white rounded-2xl shadow-sm border border-gray-100"><i class="fas fa-folder-open text-5xl mb-4 text-gray-300"></i><h3 class="text-xl font-bold text-gray-700">Karya Tidak Ditemukan</h3><p class="text-xs text-gray-400 mt-2">Belum ada karya yang disubmit khusus untuk mata kuliah "' + statusDomainSaatIni + '".</p></div>';
             }
         }
         
